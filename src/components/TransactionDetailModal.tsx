@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { 
   X, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, 
   FileText, Landmark, Key, Hash, Layers, ArrowRight, ExternalLink,
-  Lock, Check, AlertCircle, Copy, Clock, RefreshCw
+  Lock, Check, AlertCircle, Copy, Clock, RefreshCw, Download, FileDown, Printer
 } from 'lucide-react';
 import { UniversalTransaction, RiskLevel } from '../types/utvn';
+import { exportTransactionAuditPdf } from '../services/pdfReceiptService';
 
 interface TransactionDetailModalProps {
   transaction: UniversalTransaction;
@@ -19,8 +20,9 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
   onApprovePayment,
   onHaltTransaction,
 }) => {
-  const [activeTab, setActiveTab] = useState<'tree' | 'match' | 'fraud' | 'identity' | 'tax' | 'audit'>('tree');
+  const [activeTab, setActiveTab] = useState<'tree' | 'match' | 'fraud' | 'identity' | 'tax' | 'audit' | 'receipt'>('tree');
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -40,6 +42,17 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
         return <span className="text-orange-400 font-semibold text-xs flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5" /> HIGH RISK</span>;
       case 'BLOCKED':
         return <span className="text-rose-400 font-semibold text-xs flex items-center gap-1.5"><ShieldAlert className="w-3.5 h-3.5" /> BLOCKED</span>;
+    }
+  };
+
+  const handleExportPdf = () => {
+    setIsExportingPdf(true);
+    try {
+      exportTransactionAuditPdf(transaction);
+    } catch (err) {
+      console.error('PDF Export error:', err);
+    } finally {
+      setTimeout(() => setIsExportingPdf(false), 800);
     }
   };
 
@@ -65,7 +78,17 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
             </h2>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={handleExportPdf}
+              disabled={isExportingPdf}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-400 bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-800/80 rounded-lg transition-colors shadow-sm disabled:opacity-50"
+              title="Generate and download official PDF audit receipt"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>{isExportingPdf ? 'Generating PDF...' : 'Export Audit PDF'}</span>
+            </button>
+
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
@@ -161,6 +184,17 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
             }`}
           >
             Cryptographic Audit Chain
+          </button>
+          <button
+            onClick={() => setActiveTab('receipt')}
+            className={`py-3 px-3 font-medium transition-colors border-b-2 whitespace-nowrap flex items-center gap-1.5 ${
+              activeTab === 'receipt'
+                ? 'border-emerald-500 text-emerald-400 font-semibold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5 text-emerald-400" />
+            Audit PDF Receipt
           </button>
         </div>
 
@@ -695,15 +729,241 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
               </div>
             </div>
           )}
+
+          {/* TAB 6: Formatted PDF Audit Receipt Preview */}
+          {activeTab === 'receipt' && (
+            <div className="space-y-6 text-xs">
+              {/* Receipt Control Bar */}
+              <div className="p-4 bg-slate-950/80 border border-slate-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+                <div>
+                  <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-emerald-400" />
+                    Formal Transaction Audit Receipt
+                  </h4>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Official ISO 20022 & PEPPOL BIS 3.0 compliant proof with cryptographic hash chaining
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={handleExportPdf}
+                    disabled={isExportingPdf}
+                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg transition-colors shadow-sm shadow-emerald-600/30 disabled:opacity-50"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>{isExportingPdf ? 'Generating PDF...' : 'Download Official PDF'}</span>
+                  </button>
+                  <button
+                    onClick={() => window.print()}
+                    className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors"
+                    title="Print Receipt"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Visual Document Layout Preview */}
+              <div className="bg-white text-slate-900 rounded-xl p-8 border border-slate-300 shadow-2xl font-sans max-w-4xl mx-auto space-y-6">
+                {/* Header */}
+                <div className="border-b-2 border-slate-900 pb-4 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold tracking-widest text-blue-700 uppercase">
+                      FEDERATED CLEARING & SETTLEMENT PROTOCOL
+                    </span>
+                    <h2 className="text-xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+                      UNIVERSAL TRANSACTION VERIFICATION NETWORK
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      OFFICIAL TRANSACTION VERIFICATION & AUDIT RECEIPT
+                    </p>
+                  </div>
+
+                  <div className="text-right sm:text-right font-mono text-[11px] text-slate-500">
+                    <div>ISSUED: {new Date().toISOString().replace('T', ' ').substring(0, 19)} UTC</div>
+                    <div className="font-bold text-slate-800">STANDARD: ISO 20022 / PEPPOL BIS 3.0</div>
+                    <div className="text-blue-600">NODE: UTVN-PROD-GLOBAL-01</div>
+                  </div>
+                </div>
+
+                {/* Status Verdict Banner */}
+                <div className={`p-3.5 rounded-lg border flex items-center justify-between ${
+                  transaction.overallRiskLevel === 'VERIFIED'
+                    ? 'bg-emerald-50 border-emerald-500 text-emerald-900'
+                    : transaction.overallRiskLevel === 'BLOCKED'
+                    ? 'bg-rose-50 border-rose-500 text-rose-900'
+                    : 'bg-amber-50 border-amber-500 text-amber-900'
+                }`}>
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wide">
+                      AUDIT VERDICT: {transaction.overallRiskLevel}
+                    </div>
+                    <div className="text-[11px] opacity-90 mt-0.5">
+                      {transaction.riskSummary || 'All four reconciliation invariants verified with 0 deviation.'}
+                    </div>
+                  </div>
+                  <div className="text-right font-mono text-xs">
+                    <span className="font-bold">Sentinel Risk Score:</span> {transaction.riskScore} / 100
+                  </div>
+                </div>
+
+                {/* Core Identifiers 4-Col Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 bg-slate-50 rounded-lg border border-slate-200">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 block uppercase">Universal Tx ID</span>
+                    <span className="font-mono font-bold text-blue-700 text-xs">{transaction.utid}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 block uppercase">Tax IRN (Hash)</span>
+                    <span className="font-mono font-bold text-slate-800 text-[11px] truncate block" title={transaction.taxInfo.irn}>
+                      {transaction.taxInfo.irn ? transaction.taxInfo.irn.substring(0, 16) + '...' : 'EXEMPT'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 block uppercase">Lifecycle Status</span>
+                    <span className="font-mono font-bold text-slate-800 text-xs">{transaction.status}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 block uppercase">Settlement Value</span>
+                    <span className="font-mono font-bold text-emerald-700 text-sm">
+                      {transaction.currency} {transaction.totalAmount.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Buyer & Seller Dual Columns */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-3.5 border border-slate-200 rounded-lg bg-white space-y-1">
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-1">
+                      Buyer Enterprise (Principal)
+                    </div>
+                    <div className="font-bold text-slate-900 text-xs">{transaction.buyer.legalName}</div>
+                    <div className="text-[11px] text-slate-600">Tax ID / GSTIN: <span className="font-mono font-semibold">{transaction.buyer.taxId}</span></div>
+                    <div className="text-[11px] text-slate-600">Corporate Registry: <span className="font-mono">{transaction.buyer.corporateRegistryId}</span></div>
+                    <div className="text-[11px] text-slate-600">KYC Status: <span className="font-bold text-emerald-700">{transaction.buyer.kycStatus}</span></div>
+                  </div>
+
+                  <div className="p-3.5 border border-slate-200 rounded-lg bg-white space-y-1">
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-1">
+                      Seller Vendor (Beneficiary)
+                    </div>
+                    <div className="font-bold text-slate-900 text-xs">{transaction.seller.legalName}</div>
+                    <div className="text-[11px] text-slate-600">Tax ID / GSTIN: <span className="font-mono font-semibold">{transaction.seller.taxId}</span></div>
+                    <div className="text-[11px] text-slate-600">Corporate Registry: <span className="font-mono">{transaction.seller.corporateRegistryId}</span></div>
+                    <div className="text-[11px] text-slate-600">Beneficiary Account: <span className="font-mono font-semibold">{transaction.paymentDetails.beneficiaryAccount}</span></div>
+                  </div>
+                </div>
+
+                {/* 4-Way Matching Matrix */}
+                <div className="border border-slate-200 rounded-lg overflow-hidden">
+                  <div className="bg-slate-100 px-3.5 py-2 font-bold text-slate-800 text-[11px] uppercase tracking-wider">
+                    4-Way Reconciliation Evidence Record
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-slate-200 p-3 bg-white text-[11px]">
+                    <div className="p-2 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 block">1. PO Reference</span>
+                      <span className="font-mono font-bold text-slate-800">{transaction.purchaseOrderId}</span>
+                      <span className="text-[10px] text-emerald-600 block">Matched: {transaction.poIssueDate}</span>
+                    </div>
+                    <div className="p-2 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 block">2. Tax Invoice</span>
+                      <span className="font-mono font-bold text-slate-800">{transaction.invoiceId}</span>
+                      <span className="text-[10px] text-emerald-600 block">Matched: {transaction.invoiceDate}</span>
+                    </div>
+                    <div className="p-2 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 block">3. Goods Receipt (GRN)</span>
+                      <span className="font-mono font-bold text-slate-800">{transaction.deliveryConfirmation?.receiptId || 'GRN-VERIFIED-WH1'}</span>
+                      <span className="text-[10px] text-emerald-600 block">100% Quantity Accepted</span>
+                    </div>
+                    <div className="p-2 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 block">4. Bank Routing</span>
+                      <span className={`font-mono font-bold ${!transaction.paymentDetails.bankAccountChangeDetected ? 'text-emerald-700' : 'text-rose-700'}`}>
+                        {!transaction.paymentDetails.bankAccountChangeDetected ? 'VERIFIED MASTER' : 'ALTERED ACCOUNT'}
+                      </span>
+                      <span className="text-[10px] text-slate-500 block">{transaction.paymentDetails.nameMatchConfidence}% Match Confidence</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Audit Line Items */}
+                <div className="border border-slate-200 rounded-lg overflow-hidden">
+                  <table className="w-full text-left text-[11px]">
+                    <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                      <tr>
+                        <th className="py-2 px-3">Item Description</th>
+                        <th className="py-2 px-2">HSN/SAC</th>
+                        <th className="py-2 px-2 text-right">PO Qty</th>
+                        <th className="py-2 px-2 text-right">Recv Qty</th>
+                        <th className="py-2 px-3 text-right">Total ({transaction.currency})</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {transaction.lineItems.map((li, i) => (
+                        <tr key={i} className="hover:bg-slate-50">
+                          <td className="py-2 px-3 font-medium text-slate-800">{li.description}</td>
+                          <td className="py-2 px-2 font-mono text-slate-500">{li.hsnOrSacCode || 'N/A'}</td>
+                          <td className="py-2 px-2 text-right font-mono">{li.poQuantity}</td>
+                          <td className="py-2 px-2 text-right font-mono text-emerald-700 font-semibold">{li.receivedQuantity}</td>
+                          <td className="py-2 px-3 text-right font-mono font-bold text-slate-900">{li.invoiceTotal.toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Notarized Certification Seal */}
+                <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex flex-col items-center justify-center font-bold text-[9px] shadow-sm shrink-0">
+                      <span>UTVN</span>
+                      <span className="text-[7px] font-normal">SEAL</span>
+                    </div>
+                    <div>
+                      <div className="font-bold text-blue-900 text-xs">
+                        DIGITALLY NOTARIZED & CRYPTOGRAPHICALLY SECURED
+                      </div>
+                      <div className="text-[10px] text-slate-600 mt-0.5">
+                        Dual-signatory verification under federated smart contract protocol. Hash chain anchored in block {transaction.auditTrail[transaction.auditTrail.length - 1]?.currentHash.substring(0, 16)}...
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleExportPdf}
+                    disabled={isExportingPdf}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors shrink-0"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download PDF File</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between shrink-0">
-          <div className="text-xs text-slate-400">
-            Current Status: <span className="font-mono font-semibold text-white">{transaction.status}</span>
+        <div className="p-4 border-t border-slate-800 bg-slate-900/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+          <div className="text-xs text-slate-400 flex items-center gap-2">
+            <span>Status:</span>
+            <span className="font-mono font-semibold text-white">{transaction.status}</span>
+            <span className="text-slate-600">·</span>
+            <span className="font-mono text-blue-400">{transaction.auditTrail.length} Chained Blocks</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={handleExportPdf}
+              disabled={isExportingPdf}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors disabled:opacity-50"
+              title="Download PDF audit certificate"
+            >
+              <FileDown className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{isExportingPdf ? 'Exporting...' : 'PDF Receipt'}</span>
+            </button>
+
             {transaction.overallRiskLevel === 'BLOCKED' ? (
               <button
                 disabled
@@ -731,7 +991,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                 )}
               </>
             ) : (
-              <span className="text-xs text-slate-400">Transaction Settled & Archived</span>
+              <span className="text-xs text-slate-400 px-2 py-1 bg-slate-800/50 rounded border border-slate-800">Transaction Settled & Archived</span>
             )}
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { DashboardView } from './components/DashboardView';
 import { TransactionLifecycleView } from './components/TransactionLifecycleView';
@@ -11,8 +11,14 @@ import { TransactionTreeView } from './components/TransactionTreeView';
 import { PaymentBeforeReleaseView } from './components/PaymentBeforeReleaseView';
 import { TransactionDetailModal } from './components/TransactionDetailModal';
 import { NewTransactionModal } from './components/NewTransactionModal';
+import { GoogleSheetsSyncModal } from './components/GoogleSheetsSyncModal';
+import { AuthModal } from './components/AuthModal';
+import { BulkInvoiceSheetModal } from './components/BulkInvoiceSheetModal';
+import { PipelineView } from './components/PipelineView';
 import { UniversalTransaction, UserRole } from './types/utvn';
 import { mockTransactions } from './data/mockData';
+import { initAuth, testConnection } from './lib/firebase';
+import { User as FirebaseUser } from 'firebase/auth';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('dashboard');
@@ -20,10 +26,36 @@ export default function App() {
   const [transactions, setTransactions] = useState<UniversalTransaction[]>(mockTransactions);
   const [selectedTransaction, setSelectedTransaction] = useState<UniversalTransaction | null>(null);
   const [isNewTxModalOpen, setIsNewTxModalOpen] = useState<boolean>(false);
+  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState<boolean>(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+
+  useEffect(() => {
+    // Validate Firestore connection on app boot as required by skill
+    testConnection();
+
+    // Initialize Firebase Auth listener for Google account session
+    const unsubscribe = initAuth(
+      (user) => setCurrentUser(user),
+      () => setCurrentUser(null)
+    );
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   const handleCreateTransaction = (newTx: UniversalTransaction) => {
     setTransactions(prev => [newTx, ...prev]);
     setSelectedTransaction(newTx);
+  };
+
+  const handleBatchCreated = (newTxns: UniversalTransaction[]) => {
+    setTransactions(prev => [...newTxns, ...prev]);
+    if (newTxns.length > 0) {
+      setSelectedTransaction(newTxns[0]);
+    }
   };
 
   const handleApprovePayment = (utid: string) => {
@@ -121,6 +153,10 @@ export default function App() {
         activeRole={activeRole}
         setActiveRole={setActiveRole}
         onOpenNewTxModal={() => setIsNewTxModalOpen(true)}
+        onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        onOpenBulkModal={() => setIsBulkModalOpen(true)}
+        currentUser={currentUser}
       />
 
       {/* Main Viewport Container */}
@@ -131,6 +167,20 @@ export default function App() {
             onSelectTransaction={(tx) => setSelectedTransaction(tx)}
             onNavigateToLifecycle={() => setCurrentTab('lifecycle')}
             onNavigateToFraudEngine={() => setCurrentTab('fraud-engine')}
+            onNavigateToPipeline={() => setCurrentTab('pipeline')}
+            onOpenSheetsSync={() => setIsSheetsModalOpen(true)}
+            onOpenBulkImport={() => setIsBulkModalOpen(true)}
+          />
+        )}
+
+        {currentTab === 'pipeline' && (
+          <PipelineView
+            transactions={transactions}
+            onTransactionCreated={(tx) => {
+              setTransactions(prev => [tx, ...prev]);
+              setSelectedTransaction(tx);
+            }}
+            onSelectTransaction={(tx) => setSelectedTransaction(tx)}
           />
         )}
 
@@ -188,12 +238,62 @@ export default function App() {
         />
       )}
 
-      {/* New Transaction Creation Modal */}
-      <NewTransactionModal
-        isOpen={isNewTxModalOpen}
-        onClose={() => setIsNewTxModalOpen(false)}
-        onCreated={handleCreateTransaction}
-      />
+      {/* New Transaction Creation & Invoice Scanner Modal */}
+      {isNewTxModalOpen && (
+        <NewTransactionModal
+          isOpen={isNewTxModalOpen}
+          onClose={() => setIsNewTxModalOpen(false)}
+          onCreated={handleCreateTransaction}
+          existingTransactions={transactions}
+        />
+      )}
+
+      {/* Google Sheets & Cloud Sync Modal */}
+      {isSheetsModalOpen && (
+        <GoogleSheetsSyncModal
+          isOpen={isSheetsModalOpen}
+          onClose={() => setIsSheetsModalOpen(false)}
+          transactions={transactions}
+          currentUser={currentUser}
+          onAuthChange={setCurrentUser}
+          onOpenAuthModal={() => {
+            setIsSheetsModalOpen(false);
+            setIsAuthModalOpen(true);
+          }}
+          onOpenBulkImport={() => {
+            setIsSheetsModalOpen(false);
+            setIsBulkModalOpen(true);
+          }}
+        />
+      )}
+
+      {/* Enterprise Multi-Provider Auth Modal (Google, Microsoft, Apple, Email, Mobile OTP) */}
+      {isAuthModalOpen && (
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          currentUser={currentUser}
+          onAuthSuccess={(user) => {
+            setCurrentUser(user);
+            setIsAuthModalOpen(false);
+          }}
+        />
+      )}
+
+      {/* Bulk Invoice Sheet Importer Modal (Google Sheets, CSV, Auto-Matching, Batch UTID) */}
+      {isBulkModalOpen && (
+        <BulkInvoiceSheetModal
+          isOpen={isBulkModalOpen}
+          onClose={() => setIsBulkModalOpen(false)}
+          existingTransactions={transactions}
+          onBatchCreated={handleBatchCreated}
+          currentUser={currentUser}
+          onOpenAuthModal={() => {
+            setIsBulkModalOpen(false);
+            setIsAuthModalOpen(true);
+          }}
+        />
+      )}
 
       {/* Quiet, Clean Enterprise Footer */}
       <footer className="border-t border-slate-900 bg-slate-950 text-xs text-slate-500 py-6">

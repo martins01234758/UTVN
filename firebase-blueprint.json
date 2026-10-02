@@ -1,0 +1,191 @@
+{
+  "entities": {
+    "UniversalTransaction": {
+      "title": "Universal Transaction",
+      "description": "Enterprise B2B transaction linking buyer, seller, PO, invoice, tax references, and payment",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique Universal Transaction ID (UTID)"
+        },
+        "utid": {
+          "type": "string",
+          "description": "Universal Transaction Identifier Token"
+        },
+        "buyerId": {
+          "type": "string",
+          "description": "Buyer Enterprise identifier"
+        },
+        "buyerName": {
+          "type": "string",
+          "description": "Buyer legal company name"
+        },
+        "sellerId": {
+          "type": "string",
+          "description": "Seller/Supplier identifier"
+        },
+        "sellerName": {
+          "type": "string",
+          "description": "Seller legal company name"
+        },
+        "purchaseId": {
+          "type": "string",
+          "description": "Universal Purchase ID"
+        },
+        "poId": {
+          "type": "string",
+          "description": "Purchase Order reference number"
+        },
+        "invoiceId": {
+          "type": "string",
+          "description": "Supplier Invoice ID"
+        },
+        "grnId": {
+          "type": "string",
+          "description": "Goods Receipt Note / Service confirmation ID"
+        },
+        "irnReference": {
+          "type": "string",
+          "description": "Indian Tax / E-Invoice IRN SHA256 hash or Peppol reference"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Transaction total value"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Transaction total verified currency value"
+        },
+        "currency": {
+          "type": "string",
+          "description": "ISO 4217 Currency code"
+        },
+        "status": {
+          "type": "string",
+          "description": "Transaction lifecycle status"
+        },
+        "overallRiskLevel": {
+          "type": "string",
+          "description": "Risk verdict (VERIFIED, LOW_RISK, NEEDS_REVIEW, HIGH_RISK, BLOCKED)"
+        },
+        "riskScore": {
+          "type": "number",
+          "description": "Calculated risk score between 0 and 100"
+        },
+        "riskSummary": {
+          "type": "string",
+          "description": "Explainable summary of fraud risk"
+        },
+        "paymentReference": {
+          "type": "string",
+          "description": "Bank settlement reference or UTR"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of transaction initiation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of latest update"
+        },
+        "ownerUid": {
+          "type": "string",
+          "description": "Firebase UID of user creating or managing the transaction"
+        }
+      },
+      "required": ["id", "buyerId", "sellerId", "purchaseId", "poId", "amount", "currency", "status", "overallRiskLevel"]
+    },
+    "AuditLog": {
+      "title": "Tamper-Evident Audit Log",
+      "description": "Cryptographically chained audit trail entry recording state changes and authorization proofs",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Audit entry ID"
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "Target Universal Transaction ID"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO timestamp"
+        },
+        "action": {
+          "type": "string",
+          "description": "Lifecycle event or verification action"
+        },
+        "actor": {
+          "type": "string",
+          "description": "Name or role of actor executing action"
+        },
+        "actorRole": {
+          "type": "string",
+          "description": "Actor role (buyer, seller, finance_admin, bank)"
+        },
+        "blockHash": {
+          "type": "string",
+          "description": "SHA-256 hash of this entry combined with previous block hash"
+        },
+        "previousHash": {
+          "type": "string",
+          "description": "SHA-256 hash of preceding block"
+        },
+        "details": {
+          "type": "string",
+          "description": "Human-readable event details and proofs"
+        }
+      },
+      "required": ["id", "transactionId", "timestamp", "action", "actor", "blockHash", "previousHash"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Authenticated user identity and role assignment within UTVN",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Authentication UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "role": {
+          "type": "string",
+          "description": "Assigned enterprise role",
+          "enum": ["buyer", "seller", "finance_admin", "bank"]
+        },
+        "organization": {
+          "type": "string",
+          "description": "Enterprise company name"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account registration timestamp"
+        }
+      },
+      "required": ["uid", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/UniversalTransaction" },
+      "description": "Repository of enterprise B2B transactions"
+    },
+    "/audit_logs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Cryptographically chained audit trail blocks"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Registered UTVN enterprise user profiles"
+    }
+  }
+}

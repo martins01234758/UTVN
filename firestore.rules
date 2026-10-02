@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Diagnostic/Connection test path
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Transactions Collection
+    match /transactions/{transactionId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() 
+        && isValidId(transactionId)
+        && (request.resource.data.utid == transactionId || request.resource.data.id == transactionId)
+        && (
+          (request.resource.data.totalAmount is number && request.resource.data.totalAmount >= 0) ||
+          (request.resource.data.amount is number && request.resource.data.amount >= 0)
+        );
+      allow update: if isSignedIn() 
+        && isValidId(transactionId)
+        && (
+          (request.resource.data.utid == resource.data.utid) ||
+          (request.resource.data.id == resource.data.id)
+        );
+      allow delete: if false; // Tamper-evident ledger; deletion is forbidden
+    }
+
+    // Tamper-Evident Audit Log Collection
+    match /audit_logs/{logId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && isValidId(logId)
+        && request.resource.data.id == logId
+        && (request.resource.data.currentHash is string || request.resource.data.blockHash is string);
+      allow update: if false; // Chained audit entries are strictly immutable
+      allow delete: if false;
+    }
+
+    // User Profiles Collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if false;
+    }
+  }
+}
