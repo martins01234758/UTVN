@@ -1,0 +1,6 @@
+{
+  "name": "UTVN - Universal Transaction Verification Network",
+  "description": "Universal digital identity, 4-way matching, 16-point fraud detection engine, and payment authorization network for enterprise B2B transactions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
