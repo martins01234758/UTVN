@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   X, 
   Scan, 
@@ -15,7 +15,10 @@ import {
   Hash,
   Landmark,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Camera,
+  Video,
+  RefreshCw
 } from 'lucide-react';
 import { UniversalTransaction, PartyIdentity } from '../types/utvn';
 import { generateUTID, generateIRN } from '../utils/cryptoSim';
@@ -36,6 +39,13 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
   // Step 1: 'scan' (Document Upload & Extraction)
   // Step 2: 'mint' (Review & Cryptographic Registration)
   const [currentStep, setCurrentStep] = useState<'scan' | 'mint'>('scan');
+  const [scanMethod, setScanMethod] = useState<'camera' | 'upload'>('upload');
+
+  // Camera State
+  const [isCameraRunning, setIsCameraRunning] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
 
   // Invoice Form State
   const [sellerName, setSellerName] = useState('Tata Steel Industrial Products Ltd');
@@ -55,12 +65,69 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
   const [itemDescription, setItemDescription] = useState('Industrial Galvanized Structural Steel Sections');
 
   const [isScanning, setIsScanning] = useState(false);
-  const [scannedFileName, setScannedFileName] = useState<string>('Invoice-TataSteel-Q4.pdf');
+  const [scannedFileName, setScannedFileName] = useState<string>('Invoice-TataSteel-Industrial.pdf');
   const [selectedSample, setSelectedSample] = useState<'steel' | 'electronics' | 'pharma'>('steel');
   const [isMinting, setIsMinting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Clean up camera stream on close / unmount
+  const stopCameraStream = () => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      mediaStreamRef.current = null;
+    }
+    setIsCameraRunning(false);
+  };
+
+  useEffect(() => {
+    if (!isOpen) {
+      stopCameraStream();
+    }
+    return () => {
+      stopCameraStream();
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  // Start Device Camera for Live Document Scanning
+  const handleStartCamera = async () => {
+    setScanMethod('camera');
+    setCameraError(null);
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera device access not supported in this browser.');
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+      });
+      mediaStreamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      setIsCameraRunning(true);
+    } catch (err: any) {
+      console.warn('Camera error:', err);
+      setCameraError('Camera access unavailable. Using optical simulated camera scanner.');
+      setIsCameraRunning(true);
+    }
+  };
+
+  // Capture & Scan from Camera
+  const handleCaptureCamera = () => {
+    setIsScanning(true);
+    stopCameraStream();
+    setScannedFileName('Live-Camera-Invoice-Scan.jpg');
+
+    setTimeout(() => {
+      setIsScanning(false);
+      setInvoiceNumber(`INV-CAM-${Math.floor(1000 + Math.random() * 9000)}`);
+      setPoNumber(`PO-CAM-${Math.floor(1000 + Math.random() * 9000)}`);
+      setTotalAmount(4850000);
+      setSellerName('Tata Steel Industrial Products Ltd');
+      setBuyerName('Larsen & Toubro Heavy Infrastructure Ltd');
+    }, 600);
+  };
 
   // Handle Drag & Drop / File Selection
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,29 +370,35 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
               <Scan className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 text-base">
-                Scan & Mint Invoice
+              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                Scan Invoice & Mint UTVN
+                <span className="text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">
+                  OCR Engine
+                </span>
               </h3>
               <p className="text-xs text-slate-500">
-                Universal Transaction Verification Network
+                Scan an invoice to extract billing data, verify counterparties, and mint to the ledger
               </p>
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => {
+              stopCameraStream();
+              onClose();
+            }}
             className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Separated 2-Step Navigation Indicator */}
+        {/* 2-Step Process Indicator */}
         <div className="px-6 py-3 bg-white border-b border-slate-100 flex items-center justify-center gap-3 shrink-0">
           {/* Step 1 Pill */}
           <button
             type="button"
             onClick={() => setCurrentStep('scan')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               currentStep === 'scan'
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs font-bold'
                 : 'text-slate-500 hover:text-slate-800 bg-slate-50 border border-slate-200'
@@ -336,7 +409,8 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
             }`}>
               1
             </span>
-            <span>Step 1: Scan & Upload</span>
+            <Scan className="w-3.5 h-3.5" />
+            <span>Step 1: Scan Invoice</span>
           </button>
 
           <ChevronRight className="w-4 h-4 text-slate-300" />
@@ -345,7 +419,7 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
           <button
             type="button"
             onClick={() => setCurrentStep('mint')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               currentStep === 'mint'
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs font-bold'
                 : 'text-slate-500 hover:text-slate-800 bg-slate-50 border border-slate-200'
@@ -356,86 +430,180 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
             }`}>
               2
             </span>
+            <ShieldCheck className="w-3.5 h-3.5" />
             <span>Step 2: Review & Mint UTID</span>
           </button>
         </div>
 
         {/* ========================================================================= */}
-        {/* STEP 1: SCAN & UPLOAD INVOICE DOCUMENT                                    */}
+        {/* STEP 1: SCAN INVOICE OPTION                                               */}
         {/* ========================================================================= */}
         {currentStep === 'scan' && (
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="flex-1 overflow-y-auto p-6 space-y-5">
             
-            {/* Upload Dropzone */}
-            <div>
-              <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-2">
-                1. Upload Invoice File (PDF, Image, or Scanned Document)
-              </label>
-
-              <div 
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50/70 rounded-2xl p-7 text-center cursor-pointer transition-all group"
+            {/* Scan Method Switcher: Camera Scan vs File Upload */}
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <button
+                type="button"
+                onClick={handleStartCamera}
+                className={`flex-1 py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  scanMethod === 'camera'
+                    ? 'bg-emerald-50 text-emerald-900 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`}
               >
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={handleFileUpload} 
-                  accept=".pdf,.png,.jpg,.jpeg,.txt" 
-                  className="hidden" 
-                />
-                <div className="flex flex-col items-center justify-center gap-2.5">
-                  <div className="p-3 rounded-2xl bg-white border border-emerald-200 shadow-xs group-hover:scale-105 transition-transform text-emerald-600">
-                    <UploadCloud className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">
-                      {scannedFileName ? (
-                        <span className="text-emerald-700 flex items-center justify-center gap-1.5 font-mono">
-                          <FileCheck2 className="w-4 h-4 text-emerald-600" /> {scannedFileName}
-                        </span>
-                      ) : (
-                        'Click to browse or drag and drop invoice file'
-                      )}
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Supports PDF, PNG, JPG scans up to 25MB
-                    </p>
+                <Camera className="w-4 h-4 text-emerald-600" />
+                <span>Scan Invoice with Camera</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  stopCameraStream();
+                  setScanMethod('upload');
+                }}
+                className={`flex-1 py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  scanMethod === 'upload'
+                    ? 'bg-emerald-50 text-emerald-900 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                <UploadCloud className="w-4 h-4 text-emerald-600" />
+                <span>Upload & Scan Invoice File</span>
+              </button>
+            </div>
+
+            {/* OPTION A: LIVE CAMERA SCANNER VIEW */}
+            {scanMethod === 'camera' && (
+              <div className="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 p-4 text-white relative space-y-4">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 font-mono text-emerald-400 font-semibold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    Live Document Optical Scanner Active
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">1080p Optical Feed</span>
+                </div>
+
+                {/* Viewfinder with Laser Scanner Line */}
+                <div className="relative h-64 bg-slate-950 rounded-xl overflow-hidden flex items-center justify-center border border-slate-800">
+                  <video 
+                    ref={videoRef} 
+                    autoPlay 
+                    playsInline 
+                    muted 
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* High-Tech Document Framing Overlay */}
+                  <div className="absolute inset-6 border-2 border-emerald-500/60 rounded-lg pointer-events-none flex flex-col justify-between p-2">
+                    <div className="flex justify-between text-emerald-400 text-xs font-mono font-bold">
+                      <span>┌ SCAN AREA</span>
+                      <span>┐</span>
+                    </div>
+                    
+                    {/* Animated Scanning Laser Line */}
+                    <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_8px_#10b981] animate-pulse"></div>
+
+                    <div className="flex justify-between text-emerald-400 text-xs font-mono font-bold">
+                      <span>└</span>
+                      <span>ALIGN INVOICE ┘</span>
+                    </div>
                   </div>
 
-                  {isScanning && (
-                    <div className="text-xs text-emerald-700 font-semibold flex items-center gap-1.5 animate-pulse mt-1 font-mono">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Scanning optical characters and extracting invoice fields...
+                  {cameraError && (
+                    <div className="absolute bottom-3 left-3 right-3 bg-slate-900/90 text-amber-300 p-2 rounded-lg text-[11px] text-center font-mono border border-amber-500/30">
+                      {cameraError}
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
 
-            {/* Quick Sample Selector */}
+                {/* Camera Capture Action */}
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-xs text-slate-400">Position physical invoice within target frame</span>
+                  <button
+                    type="button"
+                    onClick={handleCaptureCamera}
+                    className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/30 active:scale-95"
+                  >
+                    <Camera className="w-4 h-4" />
+                    <span>Capture & Scan Invoice</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* OPTION B: FILE UPLOAD DROPZONE */}
+            {scanMethod === 'upload' && (
+              <div>
+                <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-2">
+                  Drop Invoice Document to Scan (PDF, Image, Scanned Receipt)
+                </label>
+
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50/70 rounded-2xl p-7 text-center cursor-pointer transition-all group"
+                >
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleFileUpload} 
+                    accept=".pdf,.png,.jpg,.jpeg,.txt" 
+                    className="hidden" 
+                  />
+                  <div className="flex flex-col items-center justify-center gap-2.5">
+                    <div className="p-3 rounded-2xl bg-white border border-emerald-200 shadow-xs group-hover:scale-105 transition-transform text-emerald-600">
+                      <UploadCloud className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">
+                        {scannedFileName ? (
+                          <span className="text-emerald-700 flex items-center justify-center gap-1.5 font-mono">
+                            <FileCheck2 className="w-4 h-4 text-emerald-600" /> {scannedFileName}
+                          </span>
+                        ) : (
+                          'Click to upload or drag & drop invoice document'
+                        )}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        OCR extracts Tax IDs, PO numbers, bank IFSC, and line items
+                      </p>
+                    </div>
+
+                    {isScanning && (
+                      <div className="text-xs text-emerald-700 font-semibold flex items-center gap-1.5 animate-pulse mt-1 font-mono">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Scanning optical characters and extracting invoice fields...
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Quick Enterprise Invoice Pre-sets */}
             <div>
               <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-2">
-                2. Or Select an Enterprise Invoice Sample
+                Or One-Click Scan Enterprise Invoices
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <button
                   type="button"
                   onClick={() => handleSelectSample('steel')}
-                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                  className={`p-3 rounded-xl border text-left transition-all ${
                     selectedSample === 'steel'
                       ? 'bg-emerald-50/80 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20'
                       : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase">Industrial</span>
+                    <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase">Manufacturing</span>
                     {selectedSample === 'steel' && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
                   </div>
                   <div className="font-bold text-xs text-slate-900 truncate mt-1">
                     Tata Steel Products
                   </div>
-                  <div className="text-xs font-mono text-emerald-700 font-bold mt-1">
+                  <div className="text-xs font-mono text-emerald-700 font-bold mt-0.5">
                     ₹38,50,000 INR
                   </div>
                   <div className="text-[10px] text-slate-500 mt-1">
@@ -446,20 +614,20 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 <button
                   type="button"
                   onClick={() => handleSelectSample('electronics')}
-                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                  className={`p-3 rounded-xl border text-left transition-all ${
                     selectedSample === 'electronics'
                       ? 'bg-emerald-50/80 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20'
                       : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase">Electronics</span>
+                    <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase">Technology</span>
                     {selectedSample === 'electronics' && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
                   </div>
                   <div className="font-bold text-xs text-slate-900 truncate mt-1">
                     Foxconn Assembly
                   </div>
-                  <div className="text-xs font-mono text-emerald-700 font-bold mt-1">
+                  <div className="text-xs font-mono text-emerald-700 font-bold mt-0.5">
                     ₹1,84,50,000 INR
                   </div>
                   <div className="text-[10px] text-slate-500 mt-1">
@@ -470,20 +638,20 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 <button
                   type="button"
                   onClick={() => handleSelectSample('pharma')}
-                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                  className={`p-3 rounded-xl border text-left transition-all ${
                     selectedSample === 'pharma'
                       ? 'bg-emerald-50/80 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20'
                       : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase">Pharma</span>
+                    <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase">Healthcare</span>
                     {selectedSample === 'pharma' && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
                   </div>
                   <div className="font-bold text-xs text-slate-900 truncate mt-1">
                     Sun Pharma Labs
                   </div>
-                  <div className="text-xs font-mono text-emerald-700 font-bold mt-1">
+                  <div className="text-xs font-mono text-emerald-700 font-bold mt-0.5">
                     ₹67,20,000 INR
                   </div>
                   <div className="text-[10px] text-slate-500 mt-1">
@@ -493,23 +661,26 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
               </div>
             </div>
 
-            {/* Extracted Overview Card */}
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+            {/* Extracted Overview Card with Clear Next Action */}
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between shadow-2xs">
               <div>
                 <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Invoice Data Extracted & Ready for Review</span>
+                  <span>Invoice Data Extracted & Ready</span>
                 </div>
-                <div className="text-[11px] text-slate-500 mt-0.5 font-mono">
+                <div className="text-[11px] text-slate-600 mt-0.5 font-mono">
                   {sellerName} ➔ {buyerName} · {currency} {totalAmount.toLocaleString()}
                 </div>
               </div>
               <button
                 type="button"
-                onClick={() => setCurrentStep('mint')}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
+                onClick={() => {
+                  stopCameraStream();
+                  setCurrentStep('mint');
+                }}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-sm shadow-emerald-600/25 active:scale-95"
               >
-                <span>Review Details</span>
+                <span>Proceed to Minting</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

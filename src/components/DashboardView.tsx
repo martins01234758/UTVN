@@ -4,7 +4,7 @@ import {
   Search, PlayCircle, FileSpreadsheet, TableProperties, FileDown, GitBranch,
   Activity, Copy, Check, ExternalLink, ArrowUpRight,
   Calendar, Building2, SlidersHorizontal, RotateCcw, X, Hash, DollarSign,
-  ChevronDown, Filter, Layers, Clock
+  ChevronDown, Filter, Layers, Clock, Scan
 } from 'lucide-react';
 import { UniversalTransaction, RiskLevel } from '../types/utvn';
 import { exportTransactionAuditPdf } from '../services/pdfReceiptService';
@@ -17,6 +17,7 @@ interface DashboardViewProps {
   onNavigateToPipeline?: () => void;
   onOpenSheetsSync?: () => void;
   onOpenBulkImport?: () => void;
+  onOpenScanInvoice?: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -27,6 +28,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigateToPipeline,
   onOpenSheetsSync,
   onOpenBulkImport,
+  onOpenScanInvoice,
 }) => {
   // Primary Search Query
   const [searchQuery, setSearchQuery] = useState('');
@@ -377,11 +379,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          {onOpenScanInvoice && (
+            <button
+              onClick={onOpenScanInvoice}
+              className="px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-xl transition-all duration-150 flex items-center gap-2 shadow-md shadow-emerald-600/30 active:scale-95"
+            >
+              <Scan className="w-4 h-4" />
+              <span>Scan Invoice</span>
+            </button>
+          )}
           <button
             onClick={onNavigateToLifecycle}
-            className="px-3.5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all duration-150 flex items-center gap-1.5 shadow-md shadow-emerald-600/25 active:scale-95"
+            className="px-3.5 py-2 text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all duration-150 flex items-center gap-1.5 shadow-xs active:scale-95"
           >
-            <PlayCircle className="w-4 h-4" />
+            <PlayCircle className="w-4 h-4 text-emerald-600" />
             <span>Launch 4-Way Matcher</span>
           </button>
           <button

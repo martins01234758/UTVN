@@ -200,6 +200,7 @@ export default function App() {
               onNavigateToPipeline={() => setCurrentTab('pipeline')}
               onOpenSheetsSync={() => setIsSheetsModalOpen(true)}
               onOpenBulkImport={() => setIsBulkModalOpen(true)}
+              onOpenScanInvoice={() => setIsNewTxModalOpen(true)}
             />
           )}
 
