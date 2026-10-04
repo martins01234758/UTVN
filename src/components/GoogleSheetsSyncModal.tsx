@@ -146,39 +146,39 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl shadow-2xl w-full max-w-3xl overflow-hidden my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden my-8">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/60">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/80">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20">
+            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-200">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 Google Sheets & Cloud Integrations
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Live Google Sheets ledger generation, Firebase persistence, and Cloud architecture
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex border-b border-slate-800 bg-slate-950/30 px-6">
+        <div className="flex border-b border-slate-200 bg-slate-50/40 px-6">
           <button
             onClick={() => setActiveTab('sheets')}
-            className={`py-3 px-4 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors ${
+            className={`py-3 px-4 text-xs font-semibold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'sheets'
-                ? 'border-emerald-500 text-emerald-400 font-semibold'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-emerald-600 text-emerald-700 bg-emerald-50/60'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <FileSpreadsheet className="w-4 h-4" />
@@ -186,10 +186,10 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('firestore')}
-            className={`py-3 px-4 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors ${
+            className={`py-3 px-4 text-xs font-semibold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'firestore'
-                ? 'border-blue-500 text-blue-400 font-semibold'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-emerald-600 text-emerald-700 bg-emerald-50/60'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Database className="w-4 h-4" />
@@ -197,10 +197,10 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('cloudsql')}
-            className={`py-3 px-4 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors ${
+            className={`py-3 px-4 text-xs font-semibold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'cloudsql'
-                ? 'border-purple-500 text-purple-400 font-semibold'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-emerald-600 text-emerald-700 bg-emerald-50/60'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -210,14 +210,14 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
 
         {/* Notifications */}
         {errorMsg && (
-          <div className="mx-6 mt-4 p-3 bg-red-950/50 border border-red-800/80 rounded-lg text-xs text-red-300 flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <div className="mx-6 mt-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
             <div>{errorMsg}</div>
           </div>
         )}
         {successMsg && (
-          <div className="mx-6 mt-4 p-3 bg-emerald-950/50 border border-emerald-800/80 rounded-lg text-xs text-emerald-300 flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="mx-6 mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-start gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div>{successMsg}</div>
           </div>
         )}
@@ -227,16 +227,16 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
           {activeTab === 'sheets' && (
             <div className="space-y-6">
               {/* Auth Card */}
-              <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
+                  <div className="w-10 h-10 rounded-full bg-slate-200/80 flex items-center justify-center text-slate-600">
                     <User className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-bold text-slate-900">
                       {currentUser ? currentUser.displayName || currentUser.email : 'Google Account Connection'}
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className="text-xs text-slate-500">
                       {currentUser 
                         ? `Connected with scopes: sheets, drive.file (${currentUser.email})`
                         : 'Sign in with your Google account to create and sync UTVN verification ledgers'}
@@ -248,18 +248,17 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                   {currentUser ? (
                     <button
                       onClick={handleSignOut}
-                      className="px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors flex items-center gap-1.5"
+                      className="px-3.5 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
                     >
                       <LogOut className="w-3.5 h-3.5" />
                       Sign Out
                     </button>
                   ) : (
-                    /* Official Google Sign-In button specification */
                     <div>
                       <button
                         onClick={handleGoogleSignIn}
                         disabled={isSigningIn}
-                        className="flex items-center gap-3 bg-white text-slate-800 px-4 py-2 rounded-lg font-medium text-xs hover:bg-slate-100 transition-colors shadow-sm disabled:opacity-50"
+                        className="flex items-center gap-3 bg-white text-slate-800 border border-slate-300 px-4 py-2 rounded-xl font-semibold text-xs hover:bg-slate-50 transition-colors shadow-sm disabled:opacity-50"
                       >
                         <svg className="w-4 h-4" viewBox="0 0 48 48">
                           <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
@@ -273,7 +272,7 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                         <button
                           type="button"
                           onClick={onOpenAuthModal}
-                          className="text-[11px] text-blue-400 hover:text-blue-300 underline mt-1.5 block text-center w-full"
+                          className="text-[11px] text-emerald-700 hover:text-emerald-800 font-medium underline mt-1.5 block text-center w-full"
                         >
                           Or use Microsoft, Apple, Email, Phone
                         </button>
@@ -284,14 +283,14 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
               </div>
 
               {/* Action 1: Export to Google Sheets */}
-              <div className="p-5 rounded-xl bg-slate-950/40 border border-slate-800 space-y-4">
+              <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                      <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
                       Export Transactions to Google Sheets
                     </h3>
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       Generates a formatted Google Spreadsheet containing all {transactions.length} universal transactions, 
                       4-way matching flags, tax IRN hashes, and explainable risk scores.
                     </p>
@@ -299,17 +298,17 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg">
-                    <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Total Records</span>
-                    <span className="text-base font-bold text-white font-mono">{transactions.length} Txns</span>
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">Total Records</span>
+                    <span className="text-base font-bold text-slate-900 font-mono">{transactions.length} Txns</span>
                   </div>
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg">
-                    <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Columns Mapped</span>
-                    <span className="text-base font-bold text-emerald-400 font-mono">18 Fields</span>
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">Columns Mapped</span>
+                    <span className="text-base font-bold text-emerald-600 font-mono">18 Fields</span>
                   </div>
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg">
-                    <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Audit Integrity</span>
-                    <span className="text-base font-bold text-blue-400 font-mono">SHA-256 Hashes</span>
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">Audit Integrity</span>
+                    <span className="text-base font-bold text-slate-800 font-mono">SHA-256 Hashes</span>
                   </div>
                 </div>
 
@@ -318,7 +317,7 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                     <button
                       onClick={() => setShowExportConfirm(true)}
                       disabled={isExporting}
-                      className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-emerald-600/20"
+                      className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 shadow-sm"
                     >
                       {isExporting ? (
                         <>
@@ -334,30 +333,30 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                     </button>
                   </div>
                 ) : (
-                  <p className="text-xs text-amber-400 flex items-center gap-1.5">
-                    <AlertTriangle className="w-3.5 h-3.5" />
+                  <p className="text-xs text-amber-700 bg-amber-50 p-2.5 rounded-lg border border-amber-200 flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                     Please sign in with Google above to export to your Google Drive / Google Sheets.
                   </p>
                 )}
 
                 {/* Export Result Link Card */}
                 {exportResult && (
-                  <div className="p-4 bg-emerald-950/40 border border-emerald-800/80 rounded-xl space-y-2">
+                  <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <span className="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                         Spreadsheet Created Successfully!
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono">{exportResult.rowsExported} rows written</span>
+                      <span className="text-[10px] text-emerald-700 font-mono font-medium">{exportResult.rowsExported} rows written</span>
                     </div>
-                    <p className="text-xs text-slate-300">
-                      ID: <span className="font-mono text-emerald-400">{exportResult.spreadsheetId}</span>
+                    <p className="text-xs text-slate-700">
+                      ID: <span className="font-mono text-emerald-800 font-semibold">{exportResult.spreadsheetId}</span>
                     </p>
                     <a
                       href={exportResult.spreadsheetUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-400 hover:text-emerald-300 underline pt-1"
+                      className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 hover:text-emerald-800 underline pt-1"
                     >
                       Open in Google Sheets ↗
                     </a>
@@ -366,14 +365,14 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
               </div>
 
               {/* Action 2: Bulk Import Invoices from Google Sheet */}
-              <div className="p-5 rounded-xl bg-purple-950/20 border border-purple-800/50 space-y-3">
+              <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <TableProperties className="w-4 h-4 text-purple-400" />
+                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                      <TableProperties className="w-4 h-4 text-emerald-600" />
                       Bulk Invoice Sheet Importer & Auto-Match
                     </h3>
-                    <p className="text-xs text-slate-300 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       Import multiple invoices simultaneously from a Google Spreadsheet or CSV. Automatically matches known enterprise vendors, auto-renders KYC/banking details, and performs 16-point fraud checks in bulk.
                     </p>
                   </div>
@@ -385,7 +384,7 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                       onClose();
                       onOpenBulkImport();
                     }}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors shadow-md shadow-purple-600/20"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors shadow-sm"
                   >
                     <TableProperties className="w-4 h-4" />
                     Launch Bulk Sheet Importer
@@ -395,12 +394,12 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
               </div>
 
               {/* Action 3: Inspect External Google Sheet */}
-              <div className="p-5 rounded-xl bg-slate-950/40 border border-slate-800 space-y-3">
-                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                  <ExternalLink className="w-4 h-4 text-blue-400" />
+              <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <ExternalLink className="w-4 h-4 text-emerald-600" />
                   Read / Inspect Single Google Spreadsheet Range
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   Read live cell data from any Google Spreadsheet shared with your account.
                 </p>
 
@@ -411,7 +410,7 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                       placeholder="Spreadsheet ID (from URL /d/<SPREADSHEET_ID>/edit)"
                       value={readSheetId}
                       onChange={(e) => setReadSheetId(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 font-mono shadow-xs"
                     />
                   </div>
                   <div>
@@ -420,7 +419,7 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                       placeholder="Range (e.g. Sheet1!A1:D10)"
                       value={readRange}
                       onChange={(e) => setReadRange(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 font-mono shadow-xs"
                     />
                   </div>
                 </div>
@@ -428,27 +427,27 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                 <button
                   onClick={handleFetchSheetData}
                   disabled={isReadingSheet || !currentUser}
-                  className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-2 transition-colors disabled:opacity-40"
+                  className="px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-40 shadow-xs"
                 >
                   {isReadingSheet ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <FileSpreadsheet className="w-3.5 h-3.5" />}
                   Fetch Sheet Cells
                 </button>
 
                 {readRows && readRows.length > 0 && (
-                  <div className="mt-3 overflow-x-auto max-h-48 border border-slate-800 rounded-lg bg-slate-900/80">
+                  <div className="mt-3 overflow-x-auto max-h-48 border border-slate-200 rounded-xl bg-white shadow-xs">
                     <table className="w-full text-[11px] text-left">
-                      <thead className="bg-slate-950 text-slate-400 font-mono sticky top-0">
+                      <thead className="bg-slate-50 text-slate-600 font-mono sticky top-0 border-b border-slate-200">
                         <tr>
                           {readRows[0].map((header: any, idx: number) => (
-                            <th key={idx} className="px-3 py-1.5 border-b border-slate-800">{header}</th>
+                            <th key={idx} className="px-3 py-2">{header}</th>
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/60 font-mono text-slate-300">
+                      <tbody className="divide-y divide-slate-100 font-mono text-slate-700">
                         {readRows.slice(1, 6).map((row: any[], rowIdx: number) => (
-                          <tr key={rowIdx} className="hover:bg-slate-800/40">
+                          <tr key={rowIdx} className="hover:bg-slate-50">
                             {row.map((cell: any, cellIdx: number) => (
-                              <td key={cellIdx} className="px-3 py-1.5 whitespace-nowrap">{String(cell)}</td>
+                              <td key={cellIdx} className="px-3 py-2 whitespace-nowrap">{String(cell)}</td>
                             ))}
                           </tr>
                         ))}
@@ -463,19 +462,19 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
           {/* TAB 2: FIREBASE FIRESTORE */}
           {activeTab === 'firestore' && (
             <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                     <Database className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-white flex items-center gap-2">
+                    <div className="text-sm font-bold text-slate-900 flex items-center gap-2">
                       Firebase Firestore NoSQL
-                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono font-medium">
                         PROVISIONED & ACTIVE
                       </span>
                     </div>
-                    <div className="text-xs text-slate-400 mt-0.5 font-mono">
+                    <div className="text-xs text-slate-500 mt-0.5 font-mono">
                       Project: gen-lang-client-0897913406 | DB: ai-studio-utvnuniversaltra-...
                     </div>
                   </div>
@@ -484,7 +483,7 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
                 <button
                   onClick={handleSyncFirestore}
                   disabled={isSyncingFirestore}
-                  className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
+                  className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 shadow-sm"
                 >
                   {isSyncingFirestore ? (
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -496,28 +495,28 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 bg-slate-950/40 border border-slate-800 rounded-xl space-y-2">
-                  <div className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                  <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
                     Security Rules Status
                   </div>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500">
                     Hardened 8-pillar security rules deployed. Transactions are append-only; audit trails are cryptographically sealed.
                   </p>
-                  <div className="text-[11px] font-mono text-emerald-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+                  <div className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200 font-semibold">
                     firestore.rules: DEPLOYED
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-950/40 border border-slate-800 rounded-xl space-y-2">
-                  <div className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                    <Database className="w-4 h-4 text-blue-400" />
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                  <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <Database className="w-4 h-4 text-emerald-600" />
                     Collections Registered
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Intermediate representation schema defined in <code className="text-slate-300">firebase-blueprint.json</code>:
+                  <p className="text-xs text-slate-500">
+                    Intermediate representation schema defined in <code className="text-slate-800 font-medium">firebase-blueprint.json</code>:
                   </p>
-                  <div className="text-[11px] font-mono text-blue-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+                  <div className="text-[11px] font-mono text-slate-700 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 font-medium">
                     /transactions, /audit_logs, /users
                   </div>
                 </div>
@@ -528,35 +527,35 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
           {/* TAB 3: CLOUD SQL ARCHITECTURE */}
           {activeTab === 'cloudsql' && (
             <div className="space-y-4">
-              <div className="p-4 bg-purple-950/30 border border-purple-800/60 rounded-xl space-y-3">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
                 <div className="flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-purple-400" />
-                  <h3 className="text-sm font-bold text-white">Relational Cloud SQL (PostgreSQL) Architecture Status</h3>
+                  <Layers className="w-5 h-5 text-emerald-600" />
+                  <h3 className="text-sm font-bold text-slate-900">Relational Cloud SQL (PostgreSQL) Architecture Status</h3>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  The Cloud SQL setup request for project <span className="font-mono text-purple-300">gen-lang-client-0897913406</span> in region <span className="font-mono text-purple-300">europe-west1</span> requires an active Google Cloud Billing Account with Owner permissions on the target GCP project.
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  The Cloud SQL setup request for project <span className="font-mono text-slate-800 font-semibold">gen-lang-client-0897913406</span> in region <span className="font-mono text-slate-800 font-semibold">europe-west1</span> requires an active Google Cloud Billing Account with Owner permissions on the target GCP project.
                 </p>
-                <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-1.5 font-mono text-slate-400">
-                  <div className="text-slate-300 font-semibold">Instance Provisioning Diagnostic:</div>
-                  <div className="text-amber-400">Status: Owner permissions and active GCP billing account required for PostgreSQL instance allocation.</div>
-                  <div className="text-emerald-400">Graceful Failover: Fully active Firebase Firestore Enterprise datastore enabled with real-time replication.</div>
+                <div className="p-3 bg-white border border-slate-200 rounded-lg text-xs space-y-1.5 font-mono">
+                  <div className="text-slate-700 font-semibold">Instance Provisioning Diagnostic:</div>
+                  <div className="text-amber-700">Status: Owner permissions and active GCP billing account required for PostgreSQL instance allocation.</div>
+                  <div className="text-emerald-700 font-semibold">Graceful Failover: Fully active Firebase Firestore Enterprise datastore enabled with real-time replication.</div>
                 </div>
               </div>
 
-              <div className="p-4 bg-slate-950/50 border border-slate-800 rounded-xl space-y-3">
-                <h4 className="text-xs font-semibold text-slate-200">Architectural Comparison: Relational vs. Document vs. Ledger</h4>
+              <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-3">
+                <h4 className="text-xs font-bold text-slate-900">Architectural Comparison: Relational vs. Document vs. Ledger</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg space-y-1">
-                    <span className="font-bold text-blue-400 block">Cloud SQL (Postgres)</span>
-                    <span className="text-[11px] text-slate-400">ACID 4-way matching constraints, relational foreign keys, SQL views, audit triggers.</span>
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                    <span className="font-bold text-slate-800 block">Cloud SQL (Postgres)</span>
+                    <span className="text-[11px] text-slate-500">ACID 4-way matching constraints, relational foreign keys, SQL views, audit triggers.</span>
                   </div>
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg space-y-1">
-                    <span className="font-bold text-emerald-400 block">Firebase Firestore</span>
-                    <span className="text-[11px] text-slate-400">Active enterprise NoSQL store, real-time snapshot subscribers, multi-region failover.</span>
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                    <span className="font-bold text-emerald-700 block">Firebase Firestore</span>
+                    <span className="text-[11px] text-slate-500">Active enterprise NoSQL store, real-time snapshot subscribers, multi-region failover.</span>
                   </div>
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg space-y-1">
-                    <span className="font-bold text-purple-400 block">Google Sheets</span>
-                    <span className="text-[11px] text-slate-400">Collaborative enterprise reporting, finance team auditing, live reconciliation export.</span>
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                    <span className="font-bold text-slate-800 block">Google Sheets</span>
+                    <span className="text-[11px] text-slate-500">Collaborative enterprise reporting, finance team auditing, live reconciliation export.</span>
                   </div>
                 </div>
               </div>
@@ -565,14 +564,14 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             UTVN Network Online
           </div>
           <button
             onClick={onClose}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium transition-colors"
+            className="px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-semibold transition-colors shadow-xs"
           >
             Close
           </button>
@@ -581,34 +580,34 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({
 
       {/* Mandatory User Confirmation Dialog for Mutating Workspace Operations */}
       {showExportConfirm && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
-            <div className="flex items-center gap-3 text-emerald-400">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4">
+            <div className="flex items-center gap-3 text-emerald-600">
               <FileSpreadsheet className="w-6 h-6" />
-              <h3 className="text-base font-bold text-white">Confirm Google Sheets Export</h3>
+              <h3 className="text-base font-bold text-slate-900">Confirm Google Sheets Export</h3>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               You are about to create a new Google Spreadsheet titled:
             </p>
             <input
               type="text"
               value={sheetTitle}
               onChange={(e) => setSheetTitle(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 font-medium"
             />
-            <p className="text-xs text-slate-400">
-              This will write <strong className="text-white">{transactions.length} verified transactions</strong> with 18 audit columns directly into your personal Google Drive / Google Sheets.
+            <p className="text-xs text-slate-500">
+              This will write <strong className="text-slate-900">{transactions.length} verified transactions</strong> with 18 audit columns directly into your personal Google Drive / Google Sheets.
             </p>
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setShowExportConfirm(false)}
-                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium transition-colors"
+                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmExport}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition-colors shadow-md shadow-emerald-600/30"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-sm"
               >
                 Confirm & Create Sheet
               </button>

@@ -445,42 +445,42 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden my-8 max-h-[92vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden my-8 max-h-[92vh] flex flex-col">
         {/* Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/70 shrink-0">
+        <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg border border-blue-500/20">
+            <div className="p-2 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-200">
               <Scan className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-white text-base flex items-center gap-2">
+              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
                 Create UTVN Verification
-                <span className="text-xs font-normal text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full">
+                <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
                   OCR & Company Memory
                 </span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Scan an invoice to auto-detect existing companies and populate verified records
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex border-b border-slate-800 bg-slate-950/40 px-6 shrink-0">
+        <div className="flex border-b border-slate-100 bg-slate-50/50 px-6 shrink-0">
           <button
             onClick={() => setActiveTab('scan')}
             className={`py-3 px-4 text-xs font-semibold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'scan'
-                ? 'border-blue-500 text-blue-400 bg-blue-500/5'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-emerald-600 text-emerald-700 bg-emerald-50/40'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Scan className="w-4 h-4" />
@@ -490,8 +490,8 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
             onClick={() => setActiveTab('manual')}
             className={`py-3 px-4 text-xs font-semibold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'manual'
-                ? 'border-blue-500 text-blue-400 bg-blue-500/5'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-emerald-600 text-emerald-700 bg-emerald-50/40'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -507,13 +507,13 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
               {/* Preset Invoice Selectors */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    <FileSearch className="w-3.5 h-3.5 text-blue-400" />
+                  <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                    <FileSearch className="w-3.5 h-3.5 text-emerald-600" />
                     Select Scanned Invoice Document (or Upload / Paste):
                   </label>
                   <button
                     onClick={() => setShowCustomUpload(!showCustomUpload)}
-                    className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1"
+                    className="text-xs text-emerald-700 hover:text-emerald-800 underline flex items-center gap-1 font-semibold"
                   >
                     <UploadCloud className="w-3.5 h-3.5" />
                     {showCustomUpload ? 'Hide Custom Upload' : 'Upload / Paste Custom Invoice'}
@@ -529,21 +529,21 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                         onClick={() => handleSelectSample(idx)}
                         className={`p-3 rounded-xl border text-left transition-all ${
                           isSelected
-                            ? 'bg-blue-950/40 border-blue-500 shadow-md shadow-blue-500/10'
-                            : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                            ? 'bg-emerald-50/80 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20'
+                            : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white'
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-slate-400">{sample.currency}</span>
-                          {idx === 0 && <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-mono">KNOWN VENDOR</span>}
-                          {idx === 1 && <span className="text-[9px] bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded font-mono">DIVERSION ATTACK</span>}
-                          {idx === 2 && <span className="text-[9px] bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded font-mono">PEPPOL / EU</span>}
-                          {idx === 3 && <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-mono">NEW VENDOR</span>}
+                          <span className="text-[10px] font-mono text-slate-500">{sample.currency}</span>
+                          {idx === 0 && <span className="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-bold">KNOWN VENDOR</span>}
+                          {idx === 1 && <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded font-mono font-bold">DIVERSION ATTACK</span>}
+                          {idx === 2 && <span className="text-[9px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-mono font-bold">PEPPOL / EU</span>}
+                          {idx === 3 && <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-mono font-bold">NEW VENDOR</span>}
                         </div>
-                        <div className="font-semibold text-xs text-white truncate mt-1">
+                        <div className="font-semibold text-xs text-slate-900 truncate mt-1">
                           {sample.sellerName}
                         </div>
-                        <div className="text-[11px] font-mono text-blue-400 mt-0.5">
+                        <div className="text-[11px] font-mono text-emerald-700 font-bold mt-0.5">
                           {formatCurrency(sample.totalAmount, sample.currency)}
                         </div>
                         <div className="text-[10px] text-slate-500 mt-1 truncate">
@@ -557,20 +557,20 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
 
               {/* Custom Upload or Paste Area */}
               {showCustomUpload && (
-                <div className="p-4 bg-slate-950 border border-blue-900/50 rounded-xl space-y-3">
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-white flex items-center gap-1.5">
-                      <UploadCloud className="w-4 h-4 text-blue-400" />
+                    <span className="text-xs font-semibold text-slate-900 flex items-center gap-1.5">
+                      <UploadCloud className="w-4 h-4 text-emerald-600" />
                       Paste Invoice Text / Upload Raw Scanned OCR Data
                     </span>
-                    <span className="text-[11px] text-slate-400 font-mono">Auto-extracts GSTIN, PO, Amount, Bank</span>
+                    <span className="text-[11px] text-slate-500 font-mono">Auto-extracts GSTIN, PO, Amount, Bank</span>
                   </div>
                   <textarea
                     rows={4}
                     value={customText}
                     onChange={(e) => handleCustomTextParse(e.target.value)}
                     placeholder="Paste text from any scanned PDF or OCR system here (e.g. Seller: Tata Steel, GSTIN: 20AAACT2702H1ZZ, Total: ₹4,850,000, A/C: 000405009821034)..."
-                    className="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 font-mono focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-lg p-3 text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
               )}
@@ -578,10 +578,10 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
               {/* Scanned Document Preview & Optical Data Inspector */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Left: Scanned Document Data */}
-                <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-xl space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                    <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-blue-400" />
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <span className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-emerald-600" />
                       Extracted Invoice OCR Metadata
                     </span>
                     <span className="text-[10px] font-mono text-slate-500">{scannedDoc.fileName}</span>
@@ -589,35 +589,35 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
 
                   <div className="space-y-2 text-xs">
                     <div className="flex items-start justify-between">
-                      <span className="text-slate-400">Supplier Legal Name:</span>
-                      <span className="font-semibold text-white text-right max-w-[200px] truncate">{scannedDoc.sellerName}</span>
+                      <span className="text-slate-500">Supplier Legal Name:</span>
+                      <span className="font-semibold text-slate-900 text-right max-w-[200px] truncate">{scannedDoc.sellerName}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Tax ID / GSTIN / VAT:</span>
-                      <span className="font-mono text-blue-400 font-bold">{scannedDoc.sellerTaxId}</span>
+                      <span className="text-slate-500">Tax ID / GSTIN / VAT:</span>
+                      <span className="font-mono text-emerald-700 font-bold">{scannedDoc.sellerTaxId}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Invoice Number:</span>
-                      <span className="font-mono text-white">{scannedDoc.invoiceNumber}</span>
+                      <span className="text-slate-500">Invoice Number:</span>
+                      <span className="font-mono text-slate-900 font-semibold">{scannedDoc.invoiceNumber}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Linked Purchase Order:</span>
-                      <span className="font-mono text-emerald-400">{scannedDoc.poNumber}</span>
+                      <span className="text-slate-500">Linked Purchase Order:</span>
+                      <span className="font-mono text-emerald-700 font-semibold">{scannedDoc.poNumber}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Total Invoice Amount:</span>
-                      <span className="font-mono font-bold text-white">{formatCurrency(scannedDoc.totalAmount, scannedDoc.currency)}</span>
+                      <span className="text-slate-500">Total Invoice Amount:</span>
+                      <span className="font-mono font-bold text-slate-900">{formatCurrency(scannedDoc.totalAmount, scannedDoc.currency)}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Remittance Bank Account:</span>
-                      <span className="font-mono text-slate-200">{scannedDoc.bankAccount} ({scannedDoc.ifscOrIban})</span>
+                      <span className="text-slate-500">Remittance Bank Account:</span>
+                      <span className="font-mono text-slate-800">{scannedDoc.bankAccount} ({scannedDoc.ifscOrIban})</span>
                     </div>
                   </div>
 
                   {scannedDoc.rawText && (
-                    <div className="pt-2 border-t border-slate-800/80">
+                    <div className="pt-2 border-t border-slate-200">
                       <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">OCR Raw Text Preview</span>
-                      <div className="p-2 bg-slate-900 rounded border border-slate-800/80 text-[10px] font-mono text-slate-400 max-h-24 overflow-y-auto whitespace-pre-wrap">
+                      <div className="p-2 bg-white rounded border border-slate-200 text-[10px] font-mono text-slate-600 max-h-24 overflow-y-auto whitespace-pre-wrap">
                         {scannedDoc.rawText}
                       </div>
                     </div>
@@ -625,21 +625,21 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 </div>
 
                 {/* Right: Company Recognition & Auto-Render Memory Engine */}
-                <div className="p-4 bg-slate-950/80 border border-slate-800 rounded-xl flex flex-col justify-between space-y-4">
+                <div className="p-4 bg-white border border-slate-200 rounded-xl flex flex-col justify-between space-y-4 shadow-2xs">
                   <div>
-                    <div className="flex items-center justify-between border-b border-slate-800/80 pb-2 mb-3">
-                      <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Sparkles className="w-4 h-4 text-emerald-400" />
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+                      <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-emerald-600" />
                         Company Recognition Engine
                       </span>
                       {isProcessingScan ? (
-                        <span className="text-[10px] text-slate-400 animate-pulse font-mono">Analyzing memory...</span>
+                        <span className="text-[10px] text-slate-500 animate-pulse font-mono">Analyzing memory...</span>
                       ) : matchResult?.isMatch ? (
-                        <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 font-mono flex items-center gap-1 font-bold">
+                        <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200 font-mono flex items-center gap-1 font-bold">
                           <Check className="w-3 h-3" /> MATCHED ({matchResult.confidence}%)
                         </span>
                       ) : (
-                        <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30 font-mono">
+                        <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full border border-amber-200 font-mono font-semibold">
                           NEW COMPANY
                         </span>
                       )}
@@ -648,64 +648,64 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                     {/* MATCH FOUND -> AUTO-RENDERED INFO */}
                     {matchResult?.isMatch && matchResult.matchedCompany ? (
                       <div className="space-y-3">
-                        <div className="p-3 bg-emerald-950/30 border border-emerald-800/60 rounded-xl space-y-1.5">
-                          <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                            <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl space-y-1.5">
+                          <div className="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                            <Building2 className="w-4 h-4 text-emerald-600 shrink-0" />
                             <span>Auto-Rendered Verified Enterprise Profile</span>
                           </div>
-                          <p className="text-[11px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-600 leading-relaxed">
                             Found matching verified company in UTVN database. Automatically populated verified KYC, registered bank account, and DSC signing authority from historical ledger.
                           </p>
                         </div>
 
                         {/* Auto-Rendered Field Matrix */}
                         <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                          <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg">
+                          <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">
                             <span className="text-[10px] text-slate-500 block">Verified Entity Name</span>
-                            <span className="font-semibold text-white text-[11px] truncate block">{matchResult.matchedCompany.legalName}</span>
+                            <span className="font-semibold text-slate-900 text-[11px] truncate block">{matchResult.matchedCompany.legalName}</span>
                           </div>
-                          <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg">
+                          <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">
                             <span className="text-[10px] text-slate-500 block">Corporate Registry ID</span>
-                            <span className="text-emerald-400 text-[11px]">{matchResult.matchedCompany.corporateRegistryId}</span>
+                            <span className="text-emerald-700 font-semibold text-[11px]">{matchResult.matchedCompany.corporateRegistryId}</span>
                           </div>
-                          <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg">
+                          <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">
                             <span className="text-[10px] text-slate-500 block">Historical Settled Txns</span>
-                            <span className="text-blue-400 text-[11px]">{matchResult.historicalTransactionCount} Previous Transactions</span>
+                            <span className="text-slate-900 font-semibold text-[11px]">{matchResult.historicalTransactionCount} Previous Transactions</span>
                           </div>
-                          <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg">
+                          <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">
                             <span className="text-[10px] text-slate-500 block">Historical Volume</span>
-                            <span className="text-purple-400 text-[11px]">{formatCurrency(matchResult.historicalVolume, scannedDoc.currency)}</span>
+                            <span className="text-slate-900 font-semibold text-[11px]">{formatCurrency(matchResult.historicalVolume, scannedDoc.currency)}</span>
                           </div>
                         </div>
 
                         {/* Signatory on File */}
-                        <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-lg text-xs space-y-1">
+                        <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1">
                           <div className="flex items-center justify-between text-[11px]">
-                            <span className="text-slate-400 flex items-center gap-1">
-                              <Key className="w-3 h-3 text-blue-400" />
+                            <span className="text-slate-600 flex items-center gap-1 font-medium">
+                              <Key className="w-3 h-3 text-emerald-600" />
                               Registered Authorized Signatory:
                             </span>
-                            <span className="text-emerald-400 font-mono text-[10px]">DSC Active</span>
+                            <span className="text-emerald-700 font-mono text-[10px] font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">DSC Active</span>
                           </div>
-                          <div className="text-slate-200 font-semibold text-[11px]">
+                          <div className="text-slate-900 font-semibold text-[11px]">
                             {matchResult.matchedCompany.authorizedSignatories[0]?.name || 'Commercial Officer'}
                           </div>
-                          <div className="text-[10px] text-slate-400">
+                          <div className="text-[10px] text-slate-500">
                             {matchResult.matchedCompany.authorizedSignatories[0]?.designation} · Limit: {formatCurrency(matchResult.matchedCompany.authorizedSignatories[0]?.signingLimit || 10000000)}
                           </div>
                         </div>
 
                         {/* Discrepancy / Diversion Warning */}
                         {!matchResult.bankAccountMatchesHistorical && (
-                          <div className="p-3 bg-rose-950/80 border border-rose-700 rounded-xl space-y-1">
-                            <div className="text-xs font-bold text-rose-300 flex items-center gap-1.5">
-                              <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl space-y-1">
+                            <div className="text-xs font-bold text-rose-800 flex items-center gap-1.5">
+                              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
                               <span>BANK ACCOUNT DIVERSION DETECTED!</span>
                             </div>
-                            <p className="text-[11px] text-rose-200 leading-relaxed">
-                              Scanned invoice requests remittance to <span className="font-mono font-bold text-white">{scannedDoc.bankAccount}</span>, but the verified historical account on file is <span className="font-mono font-bold text-white">{matchResult.historicalPrimaryAccount}</span>.
+                            <p className="text-[11px] text-rose-900 leading-relaxed">
+                              Scanned invoice requests remittance to <span className="font-mono font-bold">{scannedDoc.bankAccount}</span>, but the verified historical account on file is <span className="font-mono font-bold">{matchResult.historicalPrimaryAccount}</span>.
                             </p>
-                            <span className="text-[10px] text-rose-400 block pt-1 font-mono">
+                            <span className="text-[10px] text-rose-700 block pt-1 font-mono font-semibold">
                               Automated Sentinel will flag RISK_FLAGGED / BLOCKED upon UTID generation.
                             </span>
                           </div>
@@ -713,12 +713,12 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                       </div>
                     ) : (
                       /* NO MATCH -> FIRST-TIME VENDOR */
-                      <div className="p-4 bg-amber-950/30 border border-amber-800/60 rounded-xl space-y-2">
-                        <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                          <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+                        <div className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+                          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
                           <span>First-Time Supplier Detected</span>
                         </div>
-                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                        <p className="text-[11px] text-amber-900 leading-relaxed">
                           This company has not been previously scanned or verified in your UTVN network. Generating this transaction will trigger First-Time Supplier KYC onboarding and Penny-Drop bank verification protocols.
                         </p>
                       </div>
@@ -729,13 +729,13 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                   <div className="pt-2">
                     <button
                       onClick={handleGenerateFromScan}
-                      className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/30"
+                      className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-xs"
                     >
                       <Scan className="w-4 h-4" />
                       Generate Universal Transaction ID (UTID)
                       <ArrowRight className="w-4 h-4" />
                     </button>
-                    <p className="text-[10px] text-slate-400 text-center mt-2">
+                    <p className="text-[10px] text-slate-500 text-center mt-2">
                       Applies 4-way matching, runs 16-point fraud engine, and records immutable SHA-256 audit block.
                     </p>
                   </div>
@@ -749,53 +749,53 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
             <form onSubmit={handleManualSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Buyer */}
-                <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-                    <Building2 className="w-4 h-4 text-blue-400" />
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    <Building2 className="w-4 h-4 text-emerald-600" />
                     Buyer Entity (Enterprise)
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Company Legal Name</label>
+                    <label className="block text-[11px] text-slate-600 mb-1 font-medium">Company Legal Name</label>
                     <input
                       type="text"
                       value={buyerName}
                       onChange={(e) => setBuyerName(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">GSTIN / Tax ID</label>
+                    <label className="block text-[11px] text-slate-600 mb-1 font-medium">GSTIN / Tax ID</label>
                     <input
                       type="text"
                       value={buyerGstin}
                       onChange={(e) => setBuyerGstin(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
                   </div>
                 </div>
 
                 {/* Seller */}
-                <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-                    <Building2 className="w-4 h-4 text-purple-400" />
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    <Building2 className="w-4 h-4 text-emerald-600" />
                     Seller Entity (Supplier)
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Company Legal Name</label>
+                    <label className="block text-[11px] text-slate-600 mb-1 font-medium">Company Legal Name</label>
                     <input
                       type="text"
                       value={sellerName}
                       onChange={(e) => setSellerName(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">GSTIN / Tax ID</label>
+                    <label className="block text-[11px] text-slate-600 mb-1 font-medium">GSTIN / Tax ID</label>
                     <input
                       type="text"
                       value={sellerGstin}
                       onChange={(e) => setSellerGstin(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
                   </div>
                 </div>
@@ -804,53 +804,53 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
               {/* Transaction IDs & Amounts */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Purchase Order (PO ID)</label>
+                  <label className="block text-[11px] text-slate-600 mb-1 font-medium">Purchase Order (PO ID)</label>
                   <input
                     type="text"
                     value={poId}
                     onChange={(e) => setPoId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Invoice ID</label>
+                  <label className="block text-[11px] text-slate-600 mb-1 font-medium">Invoice ID</label>
                   <input
                     type="text"
                     value={invId}
                     onChange={(e) => setInvId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Amount (INR)</label>
+                  <label className="block text-[11px] text-slate-600 mb-1 font-medium">Amount (INR)</label>
                   <input
                     type="number"
                     value={amount}
                     onChange={(e) => setAmount(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
               </div>
 
               {/* Simulation Toggles */}
-              <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
-                <span className="text-xs font-bold text-slate-300 block">Adversarial Simulation Toggles</span>
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                <span className="text-xs font-bold text-slate-800 block">Adversarial Simulation Toggles</span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <label className="flex items-center gap-2 text-slate-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-slate-700 cursor-pointer font-medium">
                     <input
                       type="checkbox"
                       checked={simulateBankChange}
                       onChange={(e) => setSimulateBankChange(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                     />
                     <span>Simulate Bank Account Change (Diversion Fraud)</span>
                   </label>
-                  <label className="flex items-center gap-2 text-slate-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-slate-700 cursor-pointer font-medium">
                     <input
                       type="checkbox"
                       checked={simulateQtyMismatch}
                       onChange={(e) => setSimulateQtyMismatch(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                     />
                     <span>Simulate Quantity Mismatch (Overbilling)</span>
                   </label>
@@ -861,13 +861,13 @@ export const NewTransactionModal: React.FC<NewTransactionModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium transition-colors"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-colors shadow-md shadow-blue-600/30"
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
                 >
                   Create & Evaluate
                 </button>

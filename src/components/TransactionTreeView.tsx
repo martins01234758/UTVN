@@ -353,19 +353,19 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner with Mode Selector */}
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+      <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-blue-400" />
-              <span className="text-[11px] font-mono text-blue-400 font-semibold uppercase tracking-wider">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-[11px] font-mono text-emerald-700 font-bold uppercase tracking-wider">
                 Universal Transaction Verification Topology
               </span>
             </div>
-            <h2 className="text-xl font-bold text-white mt-0.5">
+            <h2 className="text-xl font-bold text-slate-900 mt-0.5">
               {treeViewMode === 'decision_gate' ? 'TXN-928371 Verification Gate → PAY / HOLD' : 'The Universal Transaction Invariant Tree'}
             </h2>
-            <p className="text-xs text-slate-300 max-w-3xl leading-relaxed mt-1">
+            <p className="text-xs text-slate-600 max-w-3xl leading-relaxed mt-1">
               {treeViewMode === 'decision_gate'
                 ? 'Every transaction must satisfy all eight verification checkpoints. If any single gate fails, automated settlement locks into HOLD state.'
                 : 'Every B2B payment is anchored to a cryptographic root Transaction ID connecting 8 required operational branches.'}
@@ -374,32 +374,32 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
 
           <div className="flex items-center gap-2 shrink-0">
             {/* Mode Switcher Tabs */}
-            <div className="flex items-center bg-slate-950 p-1 border border-slate-800 rounded-lg text-xs">
+            <div className="flex items-center bg-slate-100 p-1 border border-slate-200 rounded-xl text-xs">
               <button
                 onClick={() => setTreeViewMode('decision_gate')}
-                className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                  treeViewMode === 'decision_gate' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                  treeViewMode === 'decision_gate' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <Shield className="w-3.5 h-3.5" />
+                <Shield className="w-3.5 h-3.5 text-emerald-600" />
                 TXN-928371 (PAY / HOLD Gate)
               </button>
               <button
                 onClick={() => setTreeViewMode('structural_tree')}
-                className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                  treeViewMode === 'structural_tree' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                  treeViewMode === 'structural_tree' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <GitFork className="w-3.5 h-3.5" />
+                <GitFork className="w-3.5 h-3.5 text-emerald-600" />
                 UTID 8 Invariants Tree
               </button>
             </div>
 
             <button
               onClick={copyTreeAsText}
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
             >
-              {copiedTree ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedTree ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-slate-500" />}
               <span>{copiedTree ? 'Copied' : 'Copy Tree'}</span>
             </button>
           </div>
@@ -407,53 +407,53 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
 
         {/* MODE 1 SUB-BAR: Presets for TXN-928371 PAY/HOLD */}
         {treeViewMode === 'decision_gate' ? (
-          <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-1.5 overflow-x-auto">
-              <span className="text-slate-400 font-medium">Test Attack Presets:</span>
+              <span className="text-slate-500 font-medium">Test Attack Presets:</span>
               <button
                 onClick={() => applyPreset('clean')}
-                className="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-emerald-400 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-semibold transition-colors"
               >
                 Clean (All 8 Pass → PAY)
               </button>
               <button
                 onClick={() => applyPreset('bank_fraud')}
-                className="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-rose-400 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 font-semibold transition-colors"
               >
                 Bank Mutation Attack → HOLD
               </button>
               <button
                 onClick={() => applyPreset('amount_mismatch')}
-                className="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-amber-400 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-semibold transition-colors"
               >
                 Incorrect Amount → HOLD
               </button>
               <button
                 onClick={() => applyPreset('unconfirmed_goods')}
-                className="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-orange-400 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-800 font-semibold transition-colors"
               >
                 Unconfirmed Goods → HOLD
               </button>
               <button
                 onClick={() => applyPreset('unauthorized_purchase')}
-                className="px-2.5 py-1 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-purple-400 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-semibold transition-colors"
               >
                 Unauthorized Purchase → HOLD
               </button>
             </div>
 
             <div className="flex items-center gap-2 font-mono text-[11px]">
-              <span className="text-slate-400">Gate Score:</span>
-              <span className="text-white font-bold">
+              <span className="text-slate-500">Gate Score:</span>
+              <span className="text-slate-900 font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                 {Object.values(gateChecks).filter(Boolean).length} / 8 Passed
               </span>
             </div>
           </div>
         ) : (
           /* MODE 2 SUB-BAR: Transaction Selector */
-          <div className="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
-              <span className="text-slate-400 font-medium">Select Transaction to Inspect:</span>
+              <span className="text-slate-600 font-medium">Select Transaction to Inspect:</span>
               <select
                 value={selectedTxId}
                 onChange={(e) => {
@@ -461,24 +461,24 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                   setSeveredBranches({});
                   setSelectedNodeKey('root');
                 }}
-                className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1 text-blue-400 font-mono font-semibold focus:outline-none cursor-pointer"
+                className="bg-white border border-slate-200 rounded-xl px-3 py-1 text-slate-800 font-mono font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer shadow-2xs"
               >
                 {transactions.map(tx => (
-                  <option key={tx.utid} value={tx.utid} className="bg-slate-900 text-slate-200">
+                  <option key={tx.utid} value={tx.utid} className="text-slate-800">
                     {tx.utid} — {tx.buyer.tradeName || tx.buyer.legalName} ({tx.overallRiskLevel})
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="flex items-center gap-2 text-slate-400 font-mono text-[11px]">
+            <div className="flex items-center gap-2 text-slate-500 font-mono text-[11px]">
               <span>Current Root State:</span>
-              <span className={`font-bold px-2 py-0.5 rounded ${
+              <span className={`font-bold px-2 py-0.5 rounded border ${
                 isAnySevered || currentTx.overallRiskLevel === 'BLOCKED'
-                  ? 'bg-rose-500/20 text-rose-300'
+                  ? 'bg-rose-50 text-rose-700 border-rose-200'
                   : currentTx.overallRiskLevel === 'VERIFIED'
-                  ? 'bg-emerald-500/20 text-emerald-300'
-                  : 'bg-amber-500/20 text-amber-300'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
               }`}>
                 {isAnySevered ? 'ROOT COMPROMISED (BRANCH SEVERED)' : currentTx.overallRiskLevel}
               </span>
@@ -493,23 +493,23 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
       {treeViewMode === 'decision_gate' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Visual Tree & Checkpoints (7 Cols) */}
-          <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-blue-400" />
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 8-Point Verification Gate Hierarchy
               </h3>
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-[11px] text-slate-500 font-mono">
                 Click checkboxes to toggle verification states
               </span>
             </div>
 
             {/* ROOT NODE: TXN-928371 */}
             <div className="relative pl-6">
-              <div className="p-4 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-between">
+              <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className={`p-1.5 rounded-lg ${
-                    allGatesPassed ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+                    allGatesPassed ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
                   }`}>
                     <Lock className="w-4 h-4" />
                   </div>
@@ -517,16 +517,16 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                     <span className="font-mono text-[10px] text-slate-500 uppercase block font-bold">
                       Root Transaction Entity
                     </span>
-                    <span className="font-mono text-base font-bold text-white tracking-wide">
+                    <span className="font-mono text-base font-bold text-slate-900 tracking-wide">
                       TXN-928371
                     </span>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-mono text-xs text-slate-400 block">Corridor: INR ₹4,850,000</span>
+                  <span className="font-mono text-xs text-slate-500 block">Corridor: INR ₹4,850,000</span>
                   <span className={`font-mono text-xs font-bold ${
-                    allGatesPassed ? 'text-emerald-400' : 'text-rose-400'
+                    allGatesPassed ? 'text-emerald-700' : 'text-rose-700'
                   }`}>
                     {allGatesPassed ? 'ALL INVARIANTS SATISFIED' : 'VERIFICATION FAILED'}
                   </span>
@@ -534,7 +534,7 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
               </div>
 
               {/* Tree Branches (The 8 Gates) */}
-              <div className="relative pl-8 pt-3 space-y-2.5 before:absolute before:left-3 before:top-0 before:bottom-2 before:w-0.5 before:bg-slate-800">
+              <div className="relative pl-8 pt-3 space-y-2.5 before:absolute before:left-3 before:top-0 before:bottom-2 before:w-0.5 before:bg-slate-200">
                 {decisionGateList.map((gate, index) => {
                   const Icon = gate.icon;
                   const isPassed = gateChecks[gate.key];
@@ -543,14 +543,14 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                   return (
                     <div key={gate.key} className="relative group">
                       {/* Horizontal Connector Line */}
-                      <div className="absolute -left-5 top-5 w-5 h-0.5 bg-slate-800 group-hover:bg-blue-500/60 transition-colors" />
+                      <div className="absolute -left-5 top-5 w-5 h-0.5 bg-slate-200 group-hover:bg-emerald-500 transition-colors" />
 
                       <div
                         onClick={() => toggleGate(gate.key)}
                         className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
                           isPassed
-                            ? 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
-                            : 'bg-rose-950/20 border-rose-900/60 hover:border-rose-800'
+                            ? 'bg-white border-slate-200 hover:border-slate-300 shadow-2xs'
+                            : 'bg-rose-50/70 border-rose-200 hover:border-rose-300 text-rose-950'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-3">
@@ -559,20 +559,20 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                               type="checkbox"
                               checked={isPassed}
                               onChange={() => toggleGate(gate.key)}
-                              className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0 cursor-pointer mt-0.5"
+                              className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer mt-0.5"
                             />
                             <div className={`p-1.5 rounded-lg shrink-0 ${
-                              isPassed ? 'bg-slate-800 text-blue-400' : 'bg-rose-500/20 text-rose-400'
+                              isPassed ? 'bg-slate-100 text-slate-700' : 'bg-rose-100 text-rose-700'
                             }`}>
                               <Icon className="w-3.5 h-3.5" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-slate-400 font-bold text-[11px]">
+                                <span className="font-mono text-slate-700 font-bold text-[11px]">
                                   {isLast ? '└──' : '├──'} {gate.name}
                                 </span>
                               </div>
-                              <div className="text-slate-400 text-[11px] mt-0.5">
+                              <div className="text-slate-500 text-[11px] mt-0.5">
                                 {gate.detail}
                               </div>
                             </div>
@@ -580,11 +580,11 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
 
                           <div className="shrink-0 text-right">
                             {isPassed ? (
-                              <span className="font-mono text-[10px] font-bold text-emerald-400 flex items-center gap-1">
+                              <span className="font-mono text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded flex items-center gap-1">
                                 <Check className="w-3 h-3" /> VERIFIED
                               </span>
                             ) : (
-                              <span className="font-mono text-[10px] font-bold text-rose-400 bg-rose-500/20 px-2 py-0.5 rounded">
+                              <span className="font-mono text-[10px] font-bold text-rose-700 bg-rose-100 border border-rose-200 px-2 py-0.5 rounded">
                                 GATE FAILED
                               </span>
                             )}
@@ -598,25 +598,25 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
 
               {/* The Canonical Down Arrow pointing to PAY / HOLD */}
               <div className="pt-4 flex flex-col items-center justify-center space-y-2">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-blue-400 animate-bounce">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 border border-slate-300 text-slate-700 animate-bounce">
                   <ArrowDown className="w-4 h-4" />
                 </div>
 
                 {/* Final Decision Gate Box: PAY or HOLD */}
                 <div className={`w-full p-4 rounded-xl border text-center transition-all ${
                   decisionResult === 'PAY'
-                    ? 'bg-emerald-950/40 border-emerald-500 shadow-lg shadow-emerald-950/50'
-                    : 'bg-rose-950/40 border-rose-500 shadow-lg shadow-rose-950/50'
+                    ? 'bg-emerald-50 border-2 border-emerald-500 text-emerald-950 shadow-sm'
+                    : 'bg-rose-50 border-2 border-rose-500 text-rose-950 shadow-sm'
                 }`}>
-                  <div className="font-mono text-xs uppercase text-slate-400 tracking-wider">
+                  <div className="font-mono text-xs uppercase text-slate-600 font-semibold tracking-wider">
                     Automated Settlement Gate Verdict
                   </div>
                   <div className={`font-mono text-2xl font-black mt-1 tracking-widest ${
-                    decisionResult === 'PAY' ? 'text-emerald-400' : 'text-rose-400'
+                    decisionResult === 'PAY' ? 'text-emerald-700' : 'text-rose-700'
                   }`}>
                     [ {decisionResult} ]
                   </div>
-                  <div className="text-xs text-slate-300 mt-1 max-w-md mx-auto">
+                  <div className="text-xs text-slate-600 mt-1 max-w-md mx-auto">
                     {decisionResult === 'PAY'
                       ? 'All 8 checkpoints cryptographically confirmed. Funds cleared for automated execution.'
                       : `Settlement blocked: ${8 - Object.values(gateChecks).filter(Boolean).length} verification gates failed. Transaction frozen.`}
@@ -629,23 +629,23 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
           {/* Right Column: Gateway Execution & Audit Log (5 Cols) */}
           <div className="lg:col-span-5 space-y-4 text-xs">
             {/* Gate Analysis & Action Box */}
-            <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-mono text-blue-400 uppercase font-semibold">
+                <span className="text-[11px] font-mono text-emerald-700 uppercase font-bold">
                   Payment Clearing Gateway Execution
                 </span>
-                <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded ${
-                  decisionResult === 'PAY' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
+                <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${
+                  decisionResult === 'PAY' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
                 }`}>
                   {decisionResult} GATE ACTIVE
                 </span>
               </div>
 
               <div>
-                <h4 className="text-base font-bold text-white">
+                <h4 className="text-base font-bold text-slate-900">
                   {decisionResult === 'PAY' ? 'Authorized Payment Release Ready' : 'Payment Hold Enforcement Active'}
                 </h4>
-                <p className="text-slate-400 text-xs mt-1 leading-relaxed">
+                <p className="text-slate-600 text-xs mt-1 leading-relaxed">
                   {decisionResult === 'PAY'
                     ? 'A Verified Payment Instruction (VPI) token has been issued to the settlement bank. Beneficiary account ownership is validated.'
                     : 'The transaction sentinel has locked funds release. Out-of-band CFO confirmation and dual-key authorization required to unlock.'}
@@ -653,15 +653,15 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
               </div>
 
               {/* Checkpoint Summary List */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-800 text-[11px]">
+              <div className="space-y-1.5 pt-2 border-t border-slate-100 text-[11px]">
                 {decisionGateList.map(gate => {
                   const passed = gateChecks[gate.key];
                   return (
-                    <div key={gate.key} className="flex items-center justify-between py-1 border-b border-slate-950 font-mono">
-                      <span className={passed ? 'text-slate-300' : 'text-rose-400 font-semibold'}>
+                    <div key={gate.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 font-mono">
+                      <span className={passed ? 'text-slate-700' : 'text-rose-700 font-semibold'}>
                         {passed ? '✔' : '✖'} {gate.name}
                       </span>
-                      <span className={passed ? 'text-emerald-400' : 'text-rose-400 font-bold'}>
+                      <span className={passed ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
                         {passed ? 'OK' : 'FAIL'}
                       </span>
                     </div>
@@ -675,7 +675,7 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                   <button
                     disabled={paymentDisbursed}
                     onClick={() => setPaymentDisbursed(true)}
-                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40 text-xs"
+                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-xs text-xs"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>{paymentDisbursed ? 'RTGS Disbursed (Ref: RTGS-RBI-928371)' : 'Execute Automated PAY (Direct RTGS)'}</span>
@@ -684,7 +684,7 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                   <button
                     disabled={holdEscalated}
                     onClick={() => setHoldEscalated(true)}
-                    className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 disabled:bg-rose-900 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-rose-950/40 text-xs"
+                    className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-xs text-xs"
                   >
                     <AlertTriangle className="w-4 h-4" />
                     <span>{holdEscalated ? 'HOLD Confirmed & CFO Notified' : 'Enforce HOLD & Trigger Incident Escalation'}</span>
@@ -692,13 +692,13 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                 )}
 
                 {paymentDisbursed && (
-                  <div className="mt-2.5 p-2.5 bg-emerald-950/60 border border-emerald-800/80 rounded text-emerald-300 text-[11px] font-mono">
+                  <div className="mt-2.5 p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] font-mono">
                     Payment executed successfully under UTID TXN-928371. Settlement reference: RTGS-RBI-20261002-928371.
                   </div>
                 )}
 
                 {holdEscalated && (
-                  <div className="mt-2.5 p-2.5 bg-rose-950/60 border border-rose-800/80 rounded text-rose-300 text-[11px] font-mono">
+                  <div className="mt-2.5 p-2.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-[11px] font-mono">
                     Incident flagged in enterprise fraud queue. Primary beneficiary account frozen pending verbal callback confirmation.
                   </div>
                 )}
@@ -706,9 +706,9 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
             </div>
 
             {/* Security Explanation */}
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
-              <span className="font-semibold text-white block">Why PAY / HOLD Requires All 8 Gates:</span>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+            <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-2">
+              <span className="font-semibold text-slate-900 block">Why PAY / HOLD Requires All 8 Gates:</span>
+              <p className="text-slate-600 text-[11px] leading-relaxed">
                 In enterprise procurement, payment diversion attacks occur even when 7 out of 8 checks pass. For instance, in a Business Email Compromise (BEC), the Buyer, Seller, PO, Invoice, Delivery, and Amount are all 100% legitimate, but the <strong>Verified Bank Account</strong> is swapped to an offshore attacker. By enforcing the AND-condition across all 8 gates, UTVN catches payment diversion every time.
               </p>
             </div>
@@ -722,13 +722,13 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
       {treeViewMode === 'structural_tree' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Visual Tree Hierarchy (7 Cols) */}
-          <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <GitFork className="w-4 h-4 text-blue-400" />
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <GitFork className="w-4 h-4 text-emerald-600" />
                 Cryptographic Invariant Tree
               </h3>
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-[11px] text-slate-500 font-mono">
                 Click any node to inspect evidence or toggle attack simulation
               </span>
             </div>
@@ -739,16 +739,16 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                 onClick={() => setSelectedNodeKey('root')}
                 className={`p-4 rounded-xl border text-xs cursor-pointer transition-all ${
                   selectedNodeKey === 'root'
-                    ? 'bg-blue-950/40 border-blue-500 shadow-lg shadow-blue-950/50'
-                    : 'bg-slate-950/90 border-slate-800 hover:border-slate-700'
+                    ? 'bg-emerald-50/80 border-emerald-500 shadow-sm ring-2 ring-emerald-500/20'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`p-1.5 rounded-lg ${
                       isAnySevered || currentTx.overallRiskLevel === 'BLOCKED'
-                        ? 'bg-rose-500/20 text-rose-400'
-                        : 'bg-blue-600/20 text-blue-400'
+                        ? 'bg-rose-100 text-rose-700'
+                        : 'bg-emerald-100 text-emerald-700'
                     }`}>
                       <Lock className="w-4 h-4" />
                     </div>
@@ -756,28 +756,28 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                       <span className="font-mono text-[10px] text-slate-500 uppercase block font-bold">
                         Tree Root Anchor
                       </span>
-                      <span className="font-mono text-sm font-bold text-white">
+                      <span className="font-mono text-sm font-bold text-slate-900">
                         Transaction ID (UTID)
                       </span>
                     </div>
                   </div>
 
-                  <span className={`font-mono text-xs font-semibold px-2 py-0.5 rounded ${
+                  <span className={`font-mono text-xs font-semibold px-2 py-0.5 rounded border ${
                     isAnySevered || currentTx.overallRiskLevel === 'BLOCKED'
-                      ? 'bg-rose-500/20 text-rose-300'
-                      : 'bg-emerald-500/20 text-emerald-300'
+                      ? 'bg-rose-50 text-rose-700 border-rose-200'
+                      : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                   }`}>
                     {isAnySevered ? 'SEVERED' : currentTx.overallRiskLevel}
                   </span>
                 </div>
 
-                <div className="mt-2 text-blue-300 font-mono text-[11px] break-all">
+                <div className="mt-2 text-slate-700 font-mono text-[11px] break-all">
                   {currentTx.utid}
                 </div>
               </div>
 
               {/* Tree Branch Stems */}
-              <div className="relative pl-8 pt-3 space-y-3 before:absolute before:left-3 before:top-0 before:bottom-6 before:w-0.5 before:bg-slate-800">
+              <div className="relative pl-8 pt-3 space-y-3 before:absolute before:left-3 before:top-0 before:bottom-6 before:w-0.5 before:bg-slate-200">
                 {treeNodes.map((node, index) => {
                   const Icon = node.icon;
                   const isSelected = selectedNodeKey === node.key;
@@ -788,37 +788,37 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                   return (
                     <div key={node.key} className="relative group">
                       {/* Horizontal Connector Line */}
-                      <div className="absolute -left-5 top-5 w-5 h-0.5 bg-slate-800 group-hover:bg-blue-500/60 transition-colors" />
+                      <div className="absolute -left-5 top-5 w-5 h-0.5 bg-slate-200 group-hover:bg-emerald-500 transition-colors" />
 
                       <div
                         onClick={() => setSelectedNodeKey(node.key)}
                         className={`p-3.5 rounded-xl border text-xs cursor-pointer transition-all ${
                           isSelected
-                            ? 'bg-blue-950/30 border-blue-500 shadow-md shadow-blue-950/40'
+                            ? 'bg-emerald-50/80 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
                             : isNodeFailed
-                            ? 'bg-rose-950/20 border-rose-900/50 hover:border-rose-700'
-                            : 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
+                            ? 'bg-rose-50/70 border-rose-200 hover:border-rose-300'
+                            : 'bg-white border-slate-200 hover:border-slate-300 shadow-2xs'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2.5">
                             <div className={`p-1.5 rounded-lg shrink-0 ${
                               isNodeFailed
-                                ? 'bg-rose-500/20 text-rose-400'
-                                : 'bg-slate-800 text-blue-400'
+                                ? 'bg-rose-100 text-rose-700'
+                                : 'bg-slate-100 text-slate-700'
                             }`}>
                               <Icon className="w-4 h-4" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-slate-400 font-bold text-[11px]">
+                                <span className="font-mono text-slate-500 font-bold text-[11px]">
                                   {isLast ? '└──' : '├──'} {node.title}
                                 </span>
-                                <span className="font-mono text-slate-300 font-semibold text-[11px]">
+                                <span className="font-mono text-slate-700 font-semibold text-[11px]">
                                   [{node.idValue}]
                                 </span>
                               </div>
-                              <div className="text-slate-300 font-medium text-xs mt-0.5 truncate max-w-[320px]">
+                              <div className="text-slate-900 font-medium text-xs mt-0.5 truncate max-w-[320px]">
                                 {node.label}
                               </div>
                               <div className="text-[10px] text-slate-500 font-mono mt-0.5">
@@ -829,10 +829,10 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
 
                           {/* Status Badge & Sever Toggle */}
                           <div className="flex flex-col items-end gap-1.5 shrink-0">
-                            <span className={`font-mono text-[10px] font-semibold px-2 py-0.5 rounded ${
+                            <span className={`font-mono text-[10px] font-semibold px-2 py-0.5 rounded border ${
                               isNodeFailed
-                                ? 'bg-rose-500/20 text-rose-300'
-                                : 'bg-emerald-500/20 text-emerald-300'
+                                ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             }`}>
                               {isSevered ? 'ATTACK SEVERED' : node.status}
                             </span>
@@ -842,10 +842,10 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
                                 e.stopPropagation();
                                 toggleSeverBranch(node.key);
                               }}
-                              className={`text-[10px] font-mono px-2 py-0.5 rounded transition-colors ${
+                              className={`text-[10px] font-mono px-2 py-0.5 rounded border transition-colors ${
                                 isSevered
-                                  ? 'bg-amber-950 text-amber-300 border border-amber-800'
-                                  : 'bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-slate-700'
+                                  ? 'bg-amber-50 text-amber-800 border-amber-200'
+                                  : 'bg-slate-100 text-slate-600 hover:text-rose-700 hover:bg-rose-50 border-slate-200'
                               }`}
                             >
                               {isSevered ? 'Restore Link' : 'Simulate Sever'}
@@ -862,45 +862,45 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
 
           {/* Right Column: Branch Evidence & Cryptographic Verification Inspector (5 Cols) */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-mono text-blue-400 uppercase font-semibold">
+                <span className="text-[11px] font-mono text-emerald-700 uppercase font-bold">
                   Branch Cryptographic Inspector
                 </span>
-                <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded ${
+                <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${
                   activeNode.status === 'FAILED'
-                    ? 'bg-rose-500/20 text-rose-300'
-                    : 'bg-emerald-500/20 text-emerald-300'
+                    ? 'bg-rose-50 text-rose-700 border-rose-200'
+                    : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                 }`}>
                   {activeNode.status}
                 </span>
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-slate-900">
                   {activeNode.title}
                 </h3>
-                <div className="font-mono text-xs text-blue-400 mt-0.5 break-all">
+                <div className="font-mono text-xs text-emerald-700 mt-0.5 break-all font-semibold">
                   {activeNode.idValue}
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-600 mt-1">
                   {activeNode.label}
                 </p>
               </div>
 
               {/* Evidence Table */}
-              <div className="space-y-2 pt-2 border-t border-slate-800 text-xs">
-                <span className="font-semibold text-slate-300 text-[11px] uppercase tracking-wider block">
+              <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                <span className="font-semibold text-slate-700 text-[11px] uppercase tracking-wider block">
                   Verification Proofs & Bound Artifacts:
                 </span>
 
                 <div className="space-y-2">
                   {activeNode.evidence.map((ev, i) => (
-                    <div key={i} className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg space-y-0.5">
+                    <div key={i} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-0.5">
                       <span className="text-[10px] text-slate-500 font-mono block">
                         {ev.label}
                       </span>
-                      <span className="text-slate-200 font-medium font-mono text-xs break-all">
+                      <span className="text-slate-800 font-medium font-mono text-xs break-all">
                         {ev.value}
                       </span>
                     </div>
@@ -909,9 +909,9 @@ export const TransactionTreeView: React.FC<TransactionTreeViewProps> = ({
               </div>
 
               {/* Invariant Explanation */}
-              <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-1">
-                <span className="font-semibold text-white block">Structural Integrity Invariant:</span>
-                <p className="text-slate-400 text-[11px] leading-relaxed">
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
+                <span className="font-semibold text-slate-900 block">Structural Integrity Invariant:</span>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
                   The Universal Transaction ID is not a standalone primary key. It is computed as a deterministic cryptographic Merkle root of the hashes of Buyer ID, Seller ID, Purchase ID, PO ID, Invoice ID, Delivery Confirmation, Tax Reference, and Payment Reference. A mutation on any leaf invalidates the root.
                 </p>
               </div>

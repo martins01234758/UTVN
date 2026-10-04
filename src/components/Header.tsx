@@ -1,4 +1,10 @@
-import { ShieldCheck, Network, Sparkles, Building2, Landmark, CheckCircle2, FileSpreadsheet, LogIn, User as UserIcon, Scan, TableProperties, GitBranch } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  ShieldCheck, GitBranch, Menu, X, 
+  FileSpreadsheet, LogIn, Scan, TableProperties, 
+  Layers, Lock, Globe, Award, Zap, Activity, CheckCircle2,
+  Cpu
+} from 'lucide-react';
 import { UserRole } from '../types/utvn';
 import { User as FirebaseUser } from 'firebase/auth';
 
@@ -25,190 +31,306 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenBulkModal,
   currentUser,
 }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Group 1: Core Lifecycle & Verification Operations
+  const coreTabs = [
+    { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck },
+    { id: 'pipeline', label: 'CI/CD Pipeline', icon: GitBranch, hasPulse: true },
+    { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock },
+    { id: 'lifecycle', label: '4-Way Match', icon: Layers },
+    { id: 'fraud-engine', label: '16-Point Fraud Engine', icon: Activity, isAlert: true },
+  ];
+
+  // Group 2: Advanced Architecture, Protocols & Topology
+  const architectureTabs = [
+    { id: 'tree', label: 'Topology Tree DAG', icon: GitBranch },
+    { id: 'portals', label: 'Role Portals', icon: Award },
+    { id: 'trust-model', label: 'Trust & Cryptography', icon: ShieldCheck },
+    { id: 'interop', label: 'Global / India Stack', icon: Globe },
+    { id: 'strategy', label: 'MVP Blueprint', icon: Zap },
+  ];
+
   return (
-    <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40">
-      {/* Primary Top Bar Contract: Brand | Nav Links | Actions */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Zone 1: Single text element wordmark */}
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20 text-white shrink-0">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <a 
-              href="#" 
-              onClick={(e) => { e.preventDefault(); setCurrentTab('dashboard'); }} 
-              className="text-lg font-bold tracking-tight text-white flex items-center gap-2 hover:text-blue-400 transition-colors"
+    <header className="sticky top-0 z-40 bg-white shadow-xs">
+      {/* ========================================================================= */}
+      {/* TIER 1: GLOBAL BRAND, UTILITY, PERSONA SIMULATION & PRIMARY ACTIONS       */}
+      {/* ========================================================================= */}
+      <div className="border-b border-slate-200/90 bg-white/95 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
+          
+          {/* Brand & Wordmark */}
+          <div className="flex items-center gap-3 shrink-0">
+            <button 
+              onClick={() => { setCurrentTab('dashboard'); setIsMobileMenuOpen(false); }}
+              className="flex items-center gap-2.5 text-left group focus:outline-none"
             >
-              UTVN
-              <span className="text-xs font-normal text-slate-400 hidden sm:inline">
-                Universal Transaction Verification Network
-              </span>
-            </a>
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-500 flex items-center justify-center shadow-sm shadow-emerald-600/30 text-white ring-1 ring-emerald-500/20 transition-transform group-hover:scale-105 duration-200">
+                <ShieldCheck className="w-4.5 h-4.5" />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-black tracking-tight text-slate-900">
+                  UTVN
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  v2.4
+                </span>
+                <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-slate-300"></span>
+                <span className="text-[11px] text-slate-500 font-medium hidden md:inline-block">
+                  Universal Transaction Verification Network
+                </span>
+              </div>
+            </button>
+          </div>
+
+          {/* Tier 1 Right: Utility, Role Simulator, Account & Primary CTA */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            
+            {/* Simulation Persona Selector */}
+            <div className="hidden lg:flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs shadow-2xs">
+              <span className="text-slate-400 font-medium mr-1.5 text-[11px] uppercase tracking-wider">Role:</span>
+              <select
+                value={activeRole}
+                onChange={(e) => setActiveRole(e.target.value as UserRole)}
+                className="bg-transparent text-emerald-800 font-bold focus:outline-none cursor-pointer text-xs"
+              >
+                <option value="FINANCE_ADMIN" className="bg-white text-slate-800">Finance & Risk Admin</option>
+                <option value="BUYER" className="bg-white text-slate-800">Buyer (Enterprise)</option>
+                <option value="SELLER" className="bg-white text-slate-800">Seller (Vendor)</option>
+                <option value="BANK_PROVIDER" className="bg-white text-slate-800">Settlement Bank</option>
+              </select>
+            </div>
+
+            {/* Sheets & Cloud Sync Button */}
+            <button
+              onClick={onOpenSheetsModal}
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100/80 border border-emerald-200/90 rounded-lg transition-colors whitespace-nowrap"
+              title="Google Sheets & Cloud Sync"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Sheets Sync</span>
+              {currentUser ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="Connected"></span>
+              ) : (
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+              )}
+            </button>
+
+            {/* Bulk Sheet Button */}
+            <button
+              onClick={onOpenBulkModal}
+              className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors whitespace-nowrap"
+              title="Import Bulk Invoices"
+            >
+              <TableProperties className="w-3.5 h-3.5 text-slate-500" />
+              <span>Bulk Invoices</span>
+            </button>
+
+            {/* User Account / Sign In */}
+            <button
+              onClick={onOpenAuthModal}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors whitespace-nowrap shadow-2xs"
+              title="Account Authentication"
+            >
+              {currentUser ? (
+                <>
+                  <div className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-center text-[10px] font-bold">
+                    {currentUser.displayName ? currentUser.displayName[0].toUpperCase() : 'U'}
+                  </div>
+                  <span className="hidden sm:inline max-w-[80px] truncate text-slate-800">
+                    {currentUser.displayName || currentUser.email?.split('@')[0] || 'User'}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-3.5 h-3.5 text-slate-500" />
+                  <span className="hidden sm:inline">Sign In</span>
+                </>
+              )}
+            </button>
+
+            {/* Primary Action Button: Scan & Mint */}
+            <button
+              onClick={onOpenNewTxModal}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg hover:from-emerald-500 hover:to-teal-500 transition-all duration-200 shadow-sm shadow-emerald-600/30 whitespace-nowrap active:scale-95"
+              title="Scan Invoice or Mint UTVN"
+            >
+              <Scan className="w-3.5 h-3.5" />
+              <span>+ Scan & Mint</span>
+            </button>
+
+            {/* Mobile Hamburger Menu */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              aria-label="Toggle navigation menu"
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Zone 2: Navigation Links (Single-line, clean text hover) */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-sm font-medium text-slate-400">
-          <button
-            onClick={() => setCurrentTab('dashboard')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'dashboard' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            Network Ledger
-          </button>
-          <button
-            onClick={() => setCurrentTab('pipeline')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'pipeline' ? 'text-white bg-blue-600 font-semibold shadow-sm' : 'text-blue-400 hover:text-blue-300 hover:bg-slate-800/50'
-            }`}
-          >
-            <GitBranch className="w-3.5 h-3.5" />
-            <span>CI/CD Pipeline</span>
-            <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-mono">Live</span>
-          </button>
-          <button
-            onClick={() => setCurrentTab('pre-release')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'pre-release' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            Pre-Payment Release
-          </button>
-          <button
-            onClick={() => setCurrentTab('tree')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'tree' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            Transaction Tree
-          </button>
-          <button
-            onClick={() => setCurrentTab('lifecycle')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'lifecycle' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            4-Way Lifecycle Matcher
-          </button>
-          <button
-            onClick={() => setCurrentTab('fraud-engine')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'fraud-engine' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            16-Point Fraud Engine
-          </button>
-          <button
-            onClick={() => setCurrentTab('portals')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'portals' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            Role Portals
-          </button>
-          <button
-            onClick={() => setCurrentTab('trust-model')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'trust-model' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            Trust Model & Arch
-          </button>
-          <button
-            onClick={() => setCurrentTab('interop')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'interop' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            Global / India Stack
-          </button>
-          <button
-            onClick={() => setCurrentTab('strategy')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
-              currentTab === 'strategy' ? 'text-white bg-slate-800/80 font-semibold' : 'hover:text-slate-200'
-            }`}
-          >
-            MVP & Critical Analysis
-          </button>
-        </nav>
+      {/* ========================================================================= */}
+      {/* TIER 2: WORKFLOW NAVIGATION & PROTOCOL MODULES STRIP                      */}
+      {/* ========================================================================= */}
+      <div className="border-b border-slate-200/80 bg-slate-50/70 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4 overflow-x-auto scrollbar-none">
+          
+          {/* Left: Operations & Architecture Navigation Tabs */}
+          <nav className="flex items-center gap-1 text-xs font-medium text-slate-600 shrink-0">
+            
+            {/* Section 1: Operations */}
+            <div className="flex items-center gap-1">
+              {coreTabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = currentTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setCurrentTab(tab.id)}
+                    className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                      isActive
+                        ? 'bg-white text-emerald-900 font-bold border border-emerald-200/80 shadow-2xs'
+                        : 'hover:text-slate-900 hover:bg-white/80'
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${tab.isAlert ? 'text-rose-500' : isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                    <span>{tab.label}</span>
+                    {tab.hasPulse && (
+                      <span className="flex h-1.5 w-1.5 relative ml-0.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600"></span>
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
-        {/* Zone 3: Primary Actions */}
-        <div className="flex items-center gap-3">
-          {/* Persona selector for role simulation */}
-          <div className="hidden sm:flex items-center bg-slate-900 border border-slate-800 rounded-lg p-1 text-xs">
-            <span className="text-slate-400 px-2 font-medium">Role:</span>
+            {/* Subtle Divider */}
+            <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
+
+            {/* Section 2: Architecture & Topology */}
+            <div className="flex items-center gap-1">
+              {architectureTabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = currentTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setCurrentTab(tab.id)}
+                    className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                      isActive
+                        ? 'bg-white text-emerald-900 font-bold border border-emerald-200/80 shadow-2xs'
+                        : 'hover:text-slate-900 hover:bg-white/80 text-slate-600'
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
+
+          {/* Right: Network Integrity Status Pill */}
+          <div className="hidden xl:flex items-center gap-2 text-[11px] text-slate-500 font-mono shrink-0">
+            <span className="flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              <span>SHA-256 Ledger Sealed</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* MOBILE / TABLET NAVIGATION DRAWER                                         */}
+      {/* ========================================================================= */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden border-b border-slate-200 bg-white/98 backdrop-blur-2xl px-4 py-4 space-y-3 shadow-xl max-h-[85vh] overflow-y-auto">
+          {/* Role selector in mobile drawer */}
+          <div className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <span className="text-xs text-slate-600 font-medium">Active Simulation Role:</span>
             <select
               value={activeRole}
               onChange={(e) => setActiveRole(e.target.value as UserRole)}
-              className="bg-transparent text-blue-400 font-semibold focus:outline-none cursor-pointer pr-1"
+              className="bg-transparent text-emerald-800 font-bold text-xs focus:outline-none"
             >
-              <option value="BUYER" className="bg-slate-900 text-slate-200">Buyer (Enterprise)</option>
-              <option value="SELLER" className="bg-slate-900 text-slate-200">Seller (Vendor)</option>
-              <option value="FINANCE_ADMIN" className="bg-slate-900 text-slate-200">Finance & Risk Admin</option>
-              <option value="BANK_PROVIDER" className="bg-slate-900 text-slate-200">Settlement Bank</option>
+              <option value="FINANCE_ADMIN" className="bg-white text-slate-800">Finance & Risk Admin</option>
+              <option value="BUYER" className="bg-white text-slate-800">Buyer (Enterprise)</option>
+              <option value="SELLER" className="bg-white text-slate-800">Seller (Vendor)</option>
+              <option value="BANK_PROVIDER" className="bg-white text-slate-800">Settlement Bank</option>
             </select>
           </div>
 
-          <button
-            onClick={onOpenSheetsModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-400 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-800/60 rounded-lg transition-colors whitespace-nowrap"
-            title="Google Sheets, Firestore Cloud Sync, and Architecture Status"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Sheets & Cloud</span>
-            <span className="md:hidden">Cloud</span>
-            {currentUser ? (
-              <span className="w-2 h-2 rounded-full bg-emerald-400" title="Connected to Google Account"></span>
-            ) : (
-              <span className="w-2 h-2 rounded-full bg-slate-500" title="Not connected"></span>
-            )}
-          </button>
+          <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">
+            Core Operations
+          </div>
 
-          <button
-            onClick={onOpenAuthModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-200 bg-slate-800/90 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors whitespace-nowrap"
-            title="Authenticate with Google, Microsoft, Apple, Email, or Mobile"
-          >
-            {currentUser ? (
-              <>
-                <div className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-[10px] font-bold">
-                  {currentUser.displayName ? currentUser.displayName[0].toUpperCase() : 'U'}
-                </div>
-                <span className="hidden sm:inline max-w-[100px] truncate">
-                  {currentUser.displayName || currentUser.email?.split('@')[0] || currentUser.phoneNumber || 'User'}
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              </>
-            ) : (
-              <>
-                <LogIn className="w-3.5 h-3.5 text-blue-400" />
-                <span>Sign In</span>
-              </>
-            )}
-          </button>
+          <div className="grid grid-cols-2 gap-2">
+            {coreTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = currentTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => { setCurrentTab(tab.id); setIsMobileMenuOpen(false); }}
+                  className={`p-2.5 rounded-lg text-left text-xs font-semibold flex items-center gap-2 transition-all ${
+                    isActive ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span className="truncate">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-          <button
-            onClick={onOpenBulkModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-purple-300 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-800/60 rounded-lg transition-colors whitespace-nowrap"
-            title="Import bulk invoice sheet from Google Sheets or CSV"
-          >
-            <TableProperties className="w-3.5 h-3.5 text-purple-400" />
-            <span className="hidden xl:inline">Bulk Sheet</span>
-            <span className="xl:hidden">Bulk</span>
-          </button>
+          <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1 pt-2">
+            Architecture & Protocols
+          </div>
 
-          <button
-            onClick={onOpenNewTxModal}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors shadow-sm shadow-blue-600/30 whitespace-nowrap"
-            title="Scan an invoice or make a verified UTVN transaction"
-          >
-            <Scan className="w-3.5 h-3.5" />
-            <span>Scan & Make UTVN</span>
-          </button>
+          <div className="grid grid-cols-1 gap-1.5">
+            {architectureTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = currentTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => { setCurrentTab(tab.id); setIsMobileMenuOpen(false); }}
+                  className={`p-2.5 rounded-lg text-left text-xs font-semibold transition-all flex items-center justify-between ${
+                    isActive ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>{tab.label}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-mono">ACTIVE</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="pt-2 border-t border-slate-200 flex items-center gap-2">
+            <button
+              onClick={() => { onOpenSheetsModal(); setIsMobileMenuOpen(false); }}
+              className="flex-1 py-2 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg text-center"
+            >
+              Sheets Sync
+            </button>
+            <button
+              onClick={() => { onOpenBulkModal(); setIsMobileMenuOpen(false); }}
+              className="flex-1 py-2 text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg text-center"
+            >
+              Bulk Invoices
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };
+
+

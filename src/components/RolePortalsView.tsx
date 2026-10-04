@@ -61,55 +61,55 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Role Navigation Segmented Bar */}
-      <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="text-[11px] font-mono text-blue-400 font-semibold block uppercase">
+          <span className="text-[11px] font-mono text-emerald-700 font-bold block uppercase">
             Multi-Party Ecosystem
           </span>
-          <h2 className="text-base font-bold text-white">
+          <h2 className="text-base font-bold text-slate-900">
             Role-Based Persona Consoles
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-600">
             Switch views to test tailored workflows for Buyers, Suppliers, Finance/Risk Admins, and Settlement Banks.
           </p>
         </div>
 
         {/* 4 Role Selector Tabs */}
-        <div className="flex items-center gap-1 bg-slate-950 p-1 border border-slate-800 rounded-lg text-xs overflow-x-auto">
+        <div className="flex items-center gap-1 bg-slate-100 p-1 border border-slate-200 rounded-xl text-xs overflow-x-auto">
           <button
             onClick={() => setActiveRole('BUYER')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-              activeRole === 'BUYER' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+              activeRole === 'BUYER' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Building2 className="w-3.5 h-3.5" />
+            <Building2 className="w-3.5 h-3.5 text-emerald-600" />
             Buyer Portal
           </button>
           <button
             onClick={() => setActiveRole('SELLER')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-              activeRole === 'SELLER' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+              activeRole === 'SELLER' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Store className="w-3.5 h-3.5" />
+            <Store className="w-3.5 h-3.5 text-emerald-600" />
             Seller Portal
           </button>
           <button
             onClick={() => setActiveRole('FINANCE_ADMIN')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-              activeRole === 'FINANCE_ADMIN' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+              activeRole === 'FINANCE_ADMIN' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             Finance / Risk Admin
           </button>
           <button
             onClick={() => setActiveRole('BANK_PROVIDER')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-              activeRole === 'BANK_PROVIDER' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+              activeRole === 'BANK_PROVIDER' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Landmark className="w-3.5 h-3.5" />
+            <Landmark className="w-3.5 h-3.5 text-emerald-600" />
             Settlement Bank
           </button>
         </div>
@@ -120,34 +120,34 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Create Purchase & Issue PO */}
-            <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-blue-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-emerald-600" />
                   Create Purchase Order (PO)
                 </h3>
-                <span className="text-[10px] font-mono text-emerald-400 font-semibold">ERP SYNC ON</span>
+                <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">ERP SYNC ON</span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 Generate an immutable Purchase ID anchored to your enterprise Delegation of Authority (DoA).
               </p>
 
               <form onSubmit={handleCreatePo} className="space-y-3 text-xs">
                 <div>
-                  <label className="text-slate-400 block mb-1">Purchase Order ID:</label>
+                  <label className="text-slate-600 block mb-1 font-medium">Purchase Order ID:</label>
                   <input
                     type="text"
                     value={buyerPoNumber}
                     onChange={(e) => setBuyerPoNumber(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">Approved Vendor:</label>
+                  <label className="text-slate-600 block mb-1 font-medium">Approved Vendor:</label>
                   <select
                     value={buyerVendor}
                     onChange={(e) => setBuyerVendor(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   >
                     <option value="Tata Steel Industrial Products Ltd">Tata Steel Industrial Products Ltd (Verified KYC)</option>
                     <option value="Siemens Energy Operations">Siemens Energy Operations (Verified KYC)</option>
@@ -155,26 +155,26 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">Order Value (INR):</label>
+                  <label className="text-slate-600 block mb-1 font-medium">Order Value (INR):</label>
                   <input
                     type="number"
                     value={buyerAmount}
                     onChange={(e) => setBuyerAmount(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm shadow-blue-600/30"
+                  className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Issue Purchase Order & Generate UTID
                 </button>
 
                 {poCreatedNotice && (
-                  <div className="p-2.5 bg-emerald-950/60 border border-emerald-800/80 rounded text-emerald-300 text-[11px] flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
                     <span>Purchase Order broadcasted to network under UTID {generateUTID('IND')}.</span>
                   </div>
                 )}
@@ -182,17 +182,17 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
             </div>
 
             {/* Invoices Pending Review & Risk Alerts */}
-            <div className="lg:col-span-2 p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="lg:col-span-2 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-white">
+                  <h3 className="text-sm font-bold text-slate-900">
                     Invoices Pending Buyer Approval & 3-Way Match
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600">
                     Cross-matched with warehouse Goods Receipt Notes (GRN) and Tax Portal IRN hashes.
                   </p>
                 </div>
-                <span className="font-mono text-xs text-slate-400">
+                <span className="font-mono text-xs text-slate-500">
                   {mockTransactions.length} Active Records
                 </span>
               </div>
@@ -202,31 +202,31 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                   <div
                     key={tx.utid}
                     onClick={() => onSelectTransaction(tx)}
-                    className="p-3.5 bg-slate-950/60 border border-slate-800 hover:border-slate-700 rounded-lg text-xs space-y-2 cursor-pointer transition-colors"
+                    className="p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-white rounded-xl text-xs space-y-2 cursor-pointer transition-all shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-blue-400">{tx.purchaseOrderId}</span>
-                        <span className="text-slate-600">/</span>
-                        <span className="font-mono text-slate-300">{tx.invoiceId}</span>
+                        <span className="font-mono font-bold text-emerald-700">{tx.purchaseOrderId}</span>
+                        <span className="text-slate-400">/</span>
+                        <span className="font-mono text-slate-700 font-semibold">{tx.invoiceId}</span>
                       </div>
-                      <span className={`font-mono font-bold text-[11px] ${
-                        tx.overallRiskLevel === 'BLOCKED' ? 'text-rose-400' : tx.overallRiskLevel === 'VERIFIED' ? 'text-emerald-400' : 'text-amber-400'
+                      <span className={`font-mono font-bold text-[11px] px-2 py-0.5 rounded border ${
+                        tx.overallRiskLevel === 'BLOCKED' ? 'bg-rose-50 text-rose-700 border-rose-200' : tx.overallRiskLevel === 'VERIFIED' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'
                       }`}>
                         {tx.overallRiskLevel}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-slate-400">
-                      <span>Supplier: <strong className="text-slate-200">{tx.seller.legalName}</strong></span>
-                      <span className="font-mono font-semibold text-white">
+                    <div className="flex items-center justify-between text-slate-600">
+                      <span>Supplier: <strong className="text-slate-900">{tx.seller.legalName}</strong></span>
+                      <span className="font-mono font-semibold text-slate-900">
                         {tx.totalAmount.toLocaleString()} {tx.currency}
                       </span>
                     </div>
 
-                    <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-900">
+                    <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-200/60">
                       <span>{tx.riskSummary}</span>
-                      <span className="text-blue-400 font-semibold hover:underline">Review & Match →</span>
+                      <span className="text-emerald-700 font-semibold hover:underline">Review & Match →</span>
                     </div>
                   </div>
                 ))}
@@ -241,79 +241,79 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Invoice Submission & IRN Generator */}
-            <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Store className="w-4 h-4 text-blue-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Store className="w-4 h-4 text-emerald-600" />
                   Submit E-Invoice
                 </h3>
-                <span className="text-[10px] font-mono text-emerald-400 font-semibold">GST IRP INTEGRATED</span>
+                <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">GST IRP INTEGRATED</span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 Link invoice to Buyer PO and automatically sign with 64-char IRN hash and QR payload.
               </p>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="text-slate-400 block mb-1">Target Purchase Order ID:</label>
+                  <label className="text-slate-600 block mb-1 font-medium">Target Purchase Order ID:</label>
                   <input
                     type="text"
                     defaultValue="PO-2026-LT-88192"
                     readOnly
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-400 font-mono"
+                    className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-600 font-mono text-xs"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">Supplier Invoice Number:</label>
+                  <label className="text-slate-600 block mb-1 font-medium">Supplier Invoice Number:</label>
                   <input
                     type="text"
                     value={sellerInvNo}
                     onChange={(e) => setSellerInvNo(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">Supplier GSTIN:</label>
+                  <label className="text-slate-600 block mb-1 font-medium">Supplier GSTIN:</label>
                   <input
                     type="text"
                     value={sellerGstin}
                     onChange={(e) => setSellerGstin(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleGenerateSellerIrn}
-                  className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm shadow-blue-600/30"
+                  className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <Key className="w-3.5 h-3.5" />
                   Request IRN & Submit to Network
                 </button>
 
                 {sellerSubmitNotice && (
-                  <div className="p-3 bg-emerald-950/60 border border-emerald-800/80 rounded text-emerald-300 text-[11px] space-y-1">
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] space-y-1">
                     <div className="font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> IRN Generated & Registered!
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> IRN Generated & Registered!
                     </div>
-                    <div className="font-mono text-[10px] break-all opacity-80">{irnGenerated}</div>
+                    <div className="font-mono text-[10px] break-all opacity-90 text-emerald-900">{irnGenerated}</div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Invoiced Status & Settlement Tracking */}
-            <div className="lg:col-span-2 p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="lg:col-span-2 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-white">
+                  <h3 className="text-sm font-bold text-slate-900">
                     Vendor Receivables & Payment Assurance Tracker
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600">
                     Real-time status of your invoices through buyer 3-way match, tax verification, and bank clearing.
                   </p>
                 </div>
-                <span className="font-mono text-xs text-emerald-400">
+                <span className="font-mono text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
                   Verified Escrow Guarantee Enabled
                 </span>
               </div>
@@ -323,23 +323,23 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                   <div
                     key={tx.utid}
                     onClick={() => onSelectTransaction(tx)}
-                    className="p-3.5 bg-slate-950/60 border border-slate-800 hover:border-slate-700 rounded-lg text-xs space-y-2 cursor-pointer transition-colors"
+                    className="p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-white rounded-xl text-xs space-y-2 cursor-pointer transition-all shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-blue-400">{tx.invoiceId}</span>
-                      <span className="font-mono text-slate-300">{tx.status}</span>
+                      <span className="font-mono font-bold text-emerald-700">{tx.invoiceId}</span>
+                      <span className="font-mono text-slate-700 font-semibold">{tx.status}</span>
                     </div>
 
-                    <div className="flex items-center justify-between text-slate-400">
-                      <span>Buyer: <strong className="text-slate-200">{tx.buyer.legalName}</strong></span>
-                      <span className="font-mono font-semibold text-white">
+                    <div className="flex items-center justify-between text-slate-600">
+                      <span>Buyer: <strong className="text-slate-900">{tx.buyer.legalName}</strong></span>
+                      <span className="font-mono font-semibold text-slate-900">
                         {tx.totalAmount.toLocaleString()} {tx.currency}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-900">
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
                       <span>Bank Beneficiary: {tx.paymentDetails.beneficiaryAccount} ({tx.paymentDetails.status})</span>
-                      <span className="text-blue-400 font-semibold hover:underline">Track Lifecycle →</span>
+                      <span className="text-emerald-700 font-semibold hover:underline">Track Lifecycle →</span>
                     </div>
                   </div>
                 ))}
@@ -354,52 +354,52 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Approval Rules Configurator */}
-            <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-blue-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-emerald-600" />
                   Approval & Risk Thresholds
                 </h3>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 Configure corporate governance rules, maker-checker escalation limits, and bank mutation triggers.
               </p>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="text-slate-400 block mb-1">
+                  <label className="text-slate-600 block mb-1 font-medium">
                     Auto-Approve Low Risk Limit (INR):
                   </label>
                   <input
                     type="number"
                     value={autoApproveLimit}
                     onChange={(e) => setAutoApproveLimit(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   />
                   <span className="text-[10px] text-slate-500 block mt-0.5">Transactions below this value with 0 flags settle automatically</span>
                 </div>
 
                 <div>
-                  <label className="text-slate-400 block mb-1">
+                  <label className="text-slate-600 block mb-1 font-medium">
                     Mandatory Dual-CFO Limit (INR):
                   </label>
                   <input
                     type="number"
                     value={requireCfoAbove}
                     onChange={(e) => setRequireCfoAbove(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 font-mono"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
-                <div className="pt-2 border-t border-slate-800">
-                  <label className="flex items-center gap-2 cursor-pointer text-slate-300">
+                <div className="pt-2 border-t border-slate-100">
+                  <label className="flex items-center gap-2 cursor-pointer text-slate-700">
                     <input
                       type="checkbox"
                       checked={strictBankLock}
                       onChange={(e) => setStrictBankLock(e.target.checked)}
-                      className="rounded bg-slate-950 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                     />
-                    <span>Immediate Freeze on Bank Account Changes</span>
+                    <span className="font-medium">Immediate Freeze on Bank Account Changes</span>
                   </label>
                   <span className="text-[10px] text-slate-500 block ml-5 mt-0.5">
                     Requires voice callback + signed notary document if beneficiary account mutates.
@@ -409,13 +409,13 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                 <button
                   type="button"
                   onClick={handleSaveRules}
-                  className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg text-xs transition-colors"
+                  className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors shadow-xs"
                 >
                   Save Governance Policies
                 </button>
 
                 {ruleSavedNotice && (
-                  <div className="p-2 bg-emerald-950/60 border border-emerald-800/80 rounded text-emerald-300 text-[11px] text-center">
+                  <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] text-center font-medium">
                     Policies updated across network sentinel nodes.
                   </div>
                 )}
@@ -423,17 +423,17 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
             </div>
 
             {/* Enterprise Transaction Oversight & Alert Investigation */}
-            <div className="lg:col-span-2 p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+            <div className="lg:col-span-2 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-white">
+                  <h3 className="text-sm font-bold text-slate-900">
                     Risk Incidents & Fraud Investigation Queue
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600">
                     Flagged transactions requiring operational intervention or forensic inquiry.
                   </p>
                 </div>
-                <span className="font-mono text-xs text-rose-400 font-semibold">
+                <span className="font-mono text-xs text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 font-bold">
                   2 Critical Alerts Open
                 </span>
               </div>
@@ -443,28 +443,28 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                   <div
                     key={tx.utid}
                     onClick={() => onSelectTransaction(tx)}
-                    className="p-3.5 bg-slate-950/80 border border-slate-800 hover:border-slate-700 rounded-lg text-xs space-y-2 cursor-pointer transition-colors"
+                    className="p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-white rounded-xl text-xs space-y-2 cursor-pointer transition-all shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-blue-400">{tx.utid}</span>
-                        <span className="text-slate-600">·</span>
-                        <span className="text-slate-300">{tx.buyer.tradeName || tx.buyer.legalName}</span>
+                        <span className="font-mono font-bold text-emerald-700">{tx.utid}</span>
+                        <span className="text-slate-400">·</span>
+                        <span className="text-slate-700 font-semibold">{tx.buyer.tradeName || tx.buyer.legalName}</span>
                       </div>
-                      <span className={`font-mono font-bold text-[11px] px-2 py-0.5 rounded ${
-                        tx.overallRiskLevel === 'BLOCKED' ? 'bg-rose-500/20 text-rose-300' : 'bg-orange-500/20 text-orange-300'
+                      <span className={`font-mono font-bold text-[11px] px-2 py-0.5 rounded border ${
+                        tx.overallRiskLevel === 'BLOCKED' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-orange-50 text-orange-700 border-orange-200'
                       }`}>
                         {tx.overallRiskLevel}
                       </span>
                     </div>
 
-                    <p className="text-slate-300 font-medium">
+                    <p className="text-slate-700 font-medium">
                       {tx.riskSummary}
                     </p>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-900">
-                      <span>Action Recommended: <strong className="text-slate-300">{tx.recommendedAction}</strong></span>
-                      <span className="text-blue-400 font-semibold hover:underline">Open Forensic Audit →</span>
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+                      <span>Action Recommended: <strong className="text-slate-800">{tx.recommendedAction}</strong></span>
+                      <span className="text-emerald-700 font-semibold hover:underline">Open Forensic Audit →</span>
                     </div>
                   </div>
                 ))}
@@ -477,22 +477,22 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
       {/* 4. BANK / PAYMENT PROVIDER GATEWAY */}
       {activeRole === 'BANK_PROVIDER' && (
         <div className="space-y-6">
-          <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[11px] font-mono text-emerald-400 font-semibold uppercase">
+                <span className="text-[11px] font-mono text-emerald-700 font-bold uppercase">
                   Verified Payment Instruction (VPI) Rail
                 </span>
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-slate-900">
                   Settlement Bank Clearinghouse Console (RTGS / NEFT / ACH)
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-600">
                   Financial institutions receive pre-verified cryptographic tokens confirming 4-way match and beneficiary ownership before funds release.
                 </p>
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-300 rounded font-semibold">
+                <span className="px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl font-semibold">
                   API Connected: RBI / NPCI Gateway
                 </span>
               </div>
@@ -506,23 +506,23 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                 return (
                   <div
                     key={tx.utid}
-                    className="p-4 bg-slate-950/70 border border-slate-800 rounded-xl text-xs space-y-3"
+                    className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-3"
                   >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                       <div className="flex items-center gap-3">
-                        <Landmark className="w-5 h-5 text-blue-400 shrink-0" />
+                        <Landmark className="w-5 h-5 text-emerald-600 shrink-0" />
                         <div>
-                          <div className="font-mono font-bold text-slate-200">
+                          <div className="font-mono font-bold text-slate-900">
                             {tx.paymentDetails.paymentId} · UTID: {tx.utid}
                           </div>
-                          <div className="text-[11px] text-slate-400">
-                            Beneficiary: <strong className="text-white">{tx.paymentDetails.beneficiaryName}</strong> ({tx.paymentDetails.beneficiaryAccount} - {tx.paymentDetails.beneficiaryIfscOrIban})
+                          <div className="text-[11px] text-slate-600">
+                            Beneficiary: <strong className="text-slate-900">{tx.paymentDetails.beneficiaryName}</strong> ({tx.paymentDetails.beneficiaryAccount} - {tx.paymentDetails.beneficiaryIfscOrIban})
                           </div>
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <div className="font-mono text-sm font-bold text-white">
+                        <div className="font-mono text-sm font-bold text-slate-900">
                           {tx.totalAmount.toLocaleString()} {tx.currency}
                         </div>
                         <div className="text-[10px] text-slate-500 font-mono">
@@ -531,22 +531,22 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                       </div>
                     </div>
 
-                    <div className="p-2.5 bg-slate-900 border border-slate-800 rounded text-[11px] grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <div className="p-2.5 bg-white border border-slate-200 rounded-lg text-[11px] grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <div>
                         <span className="text-slate-500 block">Beneficiary Name Match:</span>
-                        <span className={tx.paymentDetails.nameMatchConfidence > 90 ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                        <span className={tx.paymentDetails.nameMatchConfidence > 90 ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
                           {tx.paymentDetails.nameMatchConfidence}% via Penny-Drop
                         </span>
                       </div>
                       <div>
                         <span className="text-slate-500 block">Account History:</span>
-                        <span className={tx.paymentDetails.bankAccountChangeDetected ? 'text-rose-400 font-bold' : 'text-slate-300'}>
+                        <span className={tx.paymentDetails.bankAccountChangeDetected ? 'text-rose-700 font-bold' : 'text-slate-800 font-medium'}>
                           {tx.paymentDetails.bankAccountChangeDetected ? 'UNVERIFIED MUTATION' : 'Verified Primary (2+ Years)'}
                         </span>
                       </div>
                       <div>
                         <span className="text-slate-500 block">4-Way Match Token:</span>
-                        <span className="font-mono text-blue-400 truncate block">
+                        <span className="font-mono text-emerald-700 truncate block font-medium">
                           {tx.paymentDetails.escrowToken || 'CRYPTOGRAPHIC_TOKEN_VALID'}
                         </span>
                       </div>
@@ -555,24 +555,24 @@ export const RolePortalsView: React.FC<RolePortalsViewProps> = ({
                     <div className="flex items-center justify-between pt-1">
                       <button
                         onClick={() => onSelectTransaction(tx)}
-                        className="text-xs text-blue-400 hover:text-blue-300 font-semibold"
+                        className="text-xs text-emerald-700 hover:text-emerald-800 font-semibold"
                       >
                         Inspect Full Cryptographic Payload →
                       </button>
 
                       <div className="flex items-center gap-2">
                         {isBlocked ? (
-                          <span className="px-3 py-1 bg-rose-950 text-rose-300 border border-rose-800 font-semibold rounded font-mono text-[11px]">
+                          <span className="px-3 py-1 bg-rose-50 text-rose-700 border border-rose-200 font-bold rounded-lg font-mono text-[11px]">
                             PAYMENT BLOCKED BY SENTINEL
                           </span>
                         ) : isExecuted ? (
-                          <span className="px-3 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 font-semibold rounded font-mono text-[11px] flex items-center gap-1">
+                          <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold rounded-lg font-mono text-[11px] flex items-center gap-1">
                             <Check className="w-3.5 h-3.5" /> SETTLEMENT CONFIRMED
                           </span>
                         ) : (
                           <button
                             onClick={() => setBankTxApproved(prev => ({ ...prev, [tx.utid]: true }))}
-                            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded text-xs transition-colors shadow-sm"
+                            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-xs transition-colors shadow-xs"
                           >
                             Execute Settlement Release
                           </button>

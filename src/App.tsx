@@ -145,7 +145,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       {/* 3-Zone Top Navigation Contract */}
       <Header
         currentTab={currentTab}
@@ -161,71 +161,73 @@ export default function App() {
 
       {/* Main Viewport Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {currentTab === 'dashboard' && (
-          <DashboardView
-            transactions={transactions}
-            onSelectTransaction={(tx) => setSelectedTransaction(tx)}
-            onNavigateToLifecycle={() => setCurrentTab('lifecycle')}
-            onNavigateToFraudEngine={() => setCurrentTab('fraud-engine')}
-            onNavigateToPipeline={() => setCurrentTab('pipeline')}
-            onOpenSheetsSync={() => setIsSheetsModalOpen(true)}
-            onOpenBulkImport={() => setIsBulkModalOpen(true)}
-          />
-        )}
+        <div key={currentTab} className="animate-fade-in">
+          {currentTab === 'dashboard' && (
+            <DashboardView
+              transactions={transactions}
+              onSelectTransaction={(tx) => setSelectedTransaction(tx)}
+              onNavigateToLifecycle={() => setCurrentTab('lifecycle')}
+              onNavigateToFraudEngine={() => setCurrentTab('fraud-engine')}
+              onNavigateToPipeline={() => setCurrentTab('pipeline')}
+              onOpenSheetsSync={() => setIsSheetsModalOpen(true)}
+              onOpenBulkImport={() => setIsBulkModalOpen(true)}
+            />
+          )}
 
-        {currentTab === 'pipeline' && (
-          <PipelineView
-            transactions={transactions}
-            onTransactionCreated={(tx) => {
-              setTransactions(prev => [tx, ...prev]);
-              setSelectedTransaction(tx);
-            }}
-            onSelectTransaction={(tx) => setSelectedTransaction(tx)}
-          />
-        )}
+          {currentTab === 'pipeline' && (
+            <PipelineView
+              transactions={transactions}
+              onTransactionCreated={(tx) => {
+                setTransactions(prev => [tx, ...prev]);
+                setSelectedTransaction(tx);
+              }}
+              onSelectTransaction={(tx) => setSelectedTransaction(tx)}
+            />
+          )}
 
-        {currentTab === 'pre-release' && (
-          <PaymentBeforeReleaseView />
-        )}
+          {currentTab === 'pre-release' && (
+            <PaymentBeforeReleaseView />
+          )}
 
-        {currentTab === 'tree' && (
-          <TransactionTreeView
-            transactions={transactions}
-            onSelectTransaction={(tx) => setSelectedTransaction(tx)}
-          />
-        )}
+          {currentTab === 'tree' && (
+            <TransactionTreeView
+              transactions={transactions}
+              onSelectTransaction={(tx) => setSelectedTransaction(tx)}
+            />
+          )}
 
-        {currentTab === 'lifecycle' && (
-          <TransactionLifecycleView
-            onTransactionCreated={(tx) => {
-              setTransactions(prev => [tx, ...prev]);
-              setSelectedTransaction(tx);
-            }}
-          />
-        )}
+          {currentTab === 'lifecycle' && (
+            <TransactionLifecycleView
+              onTransactionCreated={(tx) => {
+                setTransactions(prev => [tx, ...prev]);
+                setSelectedTransaction(tx);
+              }}
+            />
+          )}
 
-        {currentTab === 'fraud-engine' && (
-          <FraudEngineView />
-        )}
+          {currentTab === 'fraud-engine' && (
+            <FraudEngineView />
+          )}
 
-        {currentTab === 'portals' && (
-          <RolePortalsView
-            initialRole={activeRole}
-            onSelectTransaction={(tx) => setSelectedTransaction(tx)}
-          />
-        )}
+          {currentTab === 'portals' && (
+            <RolePortalsView
+              initialRole={activeRole}
+              onSelectTransaction={(tx) => setSelectedTransaction(tx)}
+            />
+          )}
 
-        {currentTab === 'trust-model' && (
-          <TrustModelView />
-        )}
+          {currentTab === 'trust-model' && (
+            <TrustModelView />
+          )}
 
-        {currentTab === 'interop' && (
-          <InteroperabilityView />
-        )}
+          {currentTab === 'interop' && (
+            <InteroperabilityView />
+          )}
 
-        {currentTab === 'strategy' && (
-          <StrategicMvpEvaluationView />
-        )}
+          {currentTab === 'strategy' && (
+            <StrategicMvpEvaluationView />
+          )}
+        </div>
       </main>
 
       {/* Detail Inspection Modal */}
@@ -296,22 +298,26 @@ export default function App() {
       )}
 
       {/* Quiet, Clean Enterprise Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 text-xs text-slate-500 py-6">
+      <footer className="border-t border-slate-200 bg-white text-xs text-slate-500 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="font-bold text-slate-300">UTVN</span>
-            <span aria-hidden="true">·</span>
-            <span>Universal Transaction Verification Network</span>
-            <span aria-hidden="true">·</span>
-            <span>Federated Architecture Protocol v2.4</span>
+            <span className="font-extrabold text-slate-900 tracking-wide">UTVN</span>
+            <span className="text-slate-300" aria-hidden="true">·</span>
+            <span className="text-slate-600 font-medium">Universal Transaction Verification Network</span>
+            <span className="text-slate-300" aria-hidden="true">·</span>
+            <span className="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-semibold border border-emerald-200">
+              Protocol v2.4 ONLINE
+            </span>
           </div>
 
-          <div className="flex items-center gap-4 text-[11px]">
-            <span>India GST / NIC IRP Ready</span>
-            <span aria-hidden="true">·</span>
+          <div className="flex items-center gap-3 text-[11px] text-slate-500 font-medium">
+            <span>India GST / NIC IRP</span>
+            <span className="text-slate-300" aria-hidden="true">·</span>
             <span>OpenPEPPOL BIS 3.0</span>
-            <span aria-hidden="true">·</span>
+            <span className="text-slate-300" aria-hidden="true">·</span>
             <span>ISO 20022 Compliant</span>
+            <span className="text-slate-300" aria-hidden="true">·</span>
+            <span className="font-mono text-emerald-700">Zero Invariant Drift</span>
           </div>
         </div>
       </footer>
