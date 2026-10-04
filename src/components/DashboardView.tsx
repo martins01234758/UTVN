@@ -739,7 +739,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Main Ledger Table */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
-        <div className="overflow-x-auto">
+        {/* Mobile Swipe Guidance Bar */}
+        <div className="sm:hidden px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+          <span className="flex items-center gap-1.5 font-semibold text-slate-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Network Ledger</span>
+          </span>
+          <span className="text-[10px] text-slate-400 font-mono">
+            Swipe sideways &rarr;
+          </span>
+        </div>
+
+        <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full text-left text-xs border-collapse">
             <thead className="bg-slate-50 text-slate-500 font-bold border-b border-slate-200 text-[11px] uppercase tracking-wider">
               <tr>

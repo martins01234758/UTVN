@@ -252,11 +252,12 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Primary Action Button: Scan & Mint */}
             <button
               onClick={onOpenNewTxModal}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg hover:from-emerald-500 hover:to-teal-500 transition-all duration-200 shadow-sm shadow-emerald-600/30 whitespace-nowrap active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg hover:from-emerald-500 hover:to-teal-500 transition-all duration-200 shadow-sm shadow-emerald-600/30 whitespace-nowrap active:scale-95 shrink-0"
               title="Scan Invoice or Mint UTVN"
             >
-              <Scan className="w-3.5 h-3.5" />
-              <span>+ Scan & Mint</span>
+              <Scan className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">+ Scan & Mint</span>
+              <span className="sm:hidden text-xs font-bold">+ Scan</span>
             </button>
 
             {/* Mobile Hamburger Menu */}
@@ -274,12 +275,15 @@ export const Header: React.FC<HeaderProps> = ({
       {/* ========================================================================= */}
       {/* TIER 2: WORKFLOW NAVIGATION & PROTOCOL MODULES STRIP                      */}
       {/* ========================================================================= */}
-      <div className={`border-b backdrop-blur-md transition-colors ${
+      <div className={`relative border-b backdrop-blur-md transition-colors ${
         appMode === 'production' 
           ? 'border-slate-200/80 bg-slate-50/70' 
           : 'border-amber-200/80 bg-amber-50/40'
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4 overflow-x-auto scrollbar-none">
+        {/* Subtle mobile right-edge swipe indicator fade */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-100/90 to-transparent sm:hidden z-10" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4 overflow-x-auto scrollbar-none scroll-smooth">
           
           {/* Left: Navigation Buttons */}
           <nav className="flex items-center gap-1 text-xs font-medium text-slate-600 shrink-0">
