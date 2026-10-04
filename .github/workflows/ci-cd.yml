@@ -52,7 +52,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Verify TypeScript & Schema Invariants
         run: npm run lint
@@ -76,7 +76,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build Production Assets (Vite)
         run: npm run build
