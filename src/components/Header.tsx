@@ -3,7 +3,7 @@ import {
   ShieldCheck, GitBranch, Menu, X, 
   FileSpreadsheet, LogIn, Scan, TableProperties, 
   Layers, Lock, Globe, Award, Zap, Activity, CheckCircle2,
-  ChevronDown, Wrench, Sparkles, Building2
+  ChevronDown, Wrench, Sparkles, SlidersHorizontal, Terminal
 } from 'lucide-react';
 import { UserRole } from '../types/utvn';
 import { User as FirebaseUser } from 'firebase/auth';
@@ -36,43 +36,76 @@ export const Header: React.FC<HeaderProps> = ({
   setAppMode,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isToolsDropdownOpen, setIsToolsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isAuditDropdownOpen, setIsAuditDropdownOpen] = useState(false);
+  const [isDevDropdownOpen, setIsDevDropdownOpen] = useState(false);
+  const auditRef = useRef<HTMLDivElement>(null);
+  const devRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsToolsDropdownOpen(false);
+      if (auditRef.current && !auditRef.current.contains(event.target as Node)) {
+        setIsAuditDropdownOpen(false);
+      }
+      if (devRef.current && !devRef.current.contains(event.target as Node)) {
+        setIsDevDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Core Production Business Operations
-  const coreProductionTabs = [
-    { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck },
-    { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock },
-    { id: 'lifecycle', label: '4-Way Match', icon: Layers },
-    { id: 'fraud-engine', label: '16-Point Fraud Engine', icon: Activity, isAlert: true },
-  ];
+  // ---------------------------------------------------------------------------
+  // 1. KEEP LIVE IN MAIN NAVIGATION: Role-Gated Core Business Operations
+  // ---------------------------------------------------------------------------
+  const getCoreTabsForRole = (role: UserRole) => {
+    switch (role) {
+      case 'BUYER':
+        return [
+          { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck, badge: 'AP Overview' },
+          { id: 'lifecycle', label: '4-Way Match', icon: Layers, badge: 'PO & GRN' },
+          { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock, badge: 'Disbursement Authorization' },
+        ];
+      case 'SELLER':
+        return [
+          { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck, badge: 'AR Receivables' },
+          { id: 'lifecycle', label: '4-Way Match', icon: Layers, badge: 'Dispatch & POD' },
+        ];
+      case 'BANK_PROVIDER':
+        return [
+          { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck, badge: 'Financing Book' },
+          { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock, badge: 'Escrow Release' },
+          { id: 'fraud-engine', label: '16-Point Fraud Engine', icon: Activity, isAlert: true, badge: 'Underwriting' },
+        ];
+      case 'FINANCE_ADMIN':
+      default:
+        return [
+          { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck },
+          { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock },
+          { id: 'lifecycle', label: '4-Way Match', icon: Layers },
+          { id: 'fraud-engine', label: '16-Point Fraud Engine', icon: Activity, isAlert: true },
+        ];
+    }
+  };
 
-  // Secondary Tools (Available in Production dropdown or full Demo bar)
-  const secondaryTools = [
-    { id: 'pipeline', label: 'Webhooks & Ingestion', icon: GitBranch, desc: 'Real-time ERP & spreadsheet sync telemetry' },
-    { id: 'tree', label: 'Topology Tree DAG', icon: GitBranch, desc: 'Cryptographic document dependency lineage' },
-    { id: 'portals', label: 'Role Portals (RBAC)', icon: Award, desc: 'Simulated Buyer, Seller & Bank views' },
+  // ---------------------------------------------------------------------------
+  // 2. ROLE-GATED: Audit & Compliance Architecture (Only for FINANCE_ADMIN)
+  // ---------------------------------------------------------------------------
+  const roleGatedAuditTools = [
+    { id: 'tree', label: 'Topology Tree DAG', icon: GitBranch, desc: 'Cryptographic document lineage & parent-child dependencies' },
+    { id: 'portals', label: 'Role Portals (RBAC)', icon: Award, desc: 'Simulated multi-party operational cockpits' },
     { id: 'trust-model', label: 'Trust & Cryptography', icon: ShieldCheck, desc: 'Zero-trust Merkle proofs & asymmetric keys' },
-    { id: 'interop', label: 'Global / India Stack', icon: Globe, desc: 'GST e-invoice IRN & PEPPOL UBL 2.1' },
+    { id: 'interop', label: 'Global / India Stack', icon: Globe, desc: 'GST e-invoice IRN & PEPPOL UBL 2.1 cross-border' },
   ];
 
-  // Demo Sandbox only tabs (e.g. strategic roadmap evaluation)
-  const demoOnlyTabs = [
-    { id: 'strategy', label: 'MVP Blueprint', icon: Zap },
+  // ---------------------------------------------------------------------------
+  // 3. HIDE OR MOVE TO DEVELOPER / ADMIN MODE (Webhooks & Telemetry)
+  // ---------------------------------------------------------------------------
+  const developerTools = [
+    { id: 'pipeline', label: 'Webhooks & Ingestion', icon: Terminal, desc: 'Live spreadsheet & ERP sync telemetry' },
   ];
 
-  // Full tab list for Sandbox / Demo mode
+  // Full Tab List for Sandbox / Demo Mode (Unlocks all 10 modules)
   const allDemoTabs = [
     { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck },
     { id: 'pipeline', label: 'CI/CD Pipeline', icon: GitBranch, hasPulse: true },
@@ -86,7 +119,9 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'strategy', label: 'MVP Blueprint', icon: Zap },
   ];
 
-  const isCurrentTabInSecondaryTools = secondaryTools.some(tool => tool.id === currentTab);
+  const coreProductionTabs = getCoreTabsForRole(activeRole);
+  const isCurrentTabInAudit = roleGatedAuditTools.some(tool => tool.id === currentTab);
+  const isCurrentTabInDev = developerTools.some(tool => tool.id === currentTab);
 
   return (
     <header className="sticky top-0 z-40 bg-white shadow-xs">
@@ -125,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
                     ? 'bg-white text-emerald-800 shadow-xs border border-slate-200/80 font-bold'
                     : 'text-slate-500 hover:text-slate-800'
                 }`}
-                title="Live Enterprise Production Mode: Streamlined for finance, audit, and AP operations"
+                title="Live Enterprise Production Mode: Streamlined for core business operations"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 <span>Live App</span>
@@ -152,7 +187,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Simulation Persona Selector */}
             <div className="hidden lg:flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs shadow-2xs">
               <span className="text-slate-400 font-medium mr-1.5 text-[11px] uppercase tracking-wider">
-                {appMode === 'production' ? 'Role:' : 'Simulate:'}
+                {appMode === 'production' ? 'Workspace Role:' : 'Simulate:'}
               </span>
               <select
                 value={activeRole}
@@ -250,10 +285,11 @@ export const Header: React.FC<HeaderProps> = ({
           <nav className="flex items-center gap-1 text-xs font-medium text-slate-600 shrink-0">
             
             {/* ------------------------------------------------------------- */}
-            {/* MODE A: LIVE PRODUCTION NAVIGATION (Streamlined & Clean)      */}
+            {/* MODE A: LIVE PRODUCTION NAVIGATION                            */}
             {/* ------------------------------------------------------------- */}
             {appMode === 'production' ? (
               <div className="flex items-center gap-1">
+                {/* 1. Core Live Operations (Role-Gated to relevant workflows) */}
                 {coreProductionTabs.map((tab) => {
                   const Icon = tab.icon;
                   const isActive = currentTab === tab.id;
@@ -273,60 +309,119 @@ export const Header: React.FC<HeaderProps> = ({
                   );
                 })}
 
-                {/* Subtle Divider */}
-                <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
+                {/* 2. Role-Gated: Audit & Compliance (Only for FINANCE_ADMIN) */}
+                {activeRole === 'FINANCE_ADMIN' && (
+                  <>
+                    <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
 
-                {/* Forensics & Advanced Tools Dropdown */}
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    type="button"
-                    onClick={() => setIsToolsDropdownOpen(!isToolsDropdownOpen)}
-                    className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs border ${
-                      isCurrentTabInSecondaryTools
-                        ? 'bg-emerald-50 text-emerald-900 font-bold border-emerald-300 shadow-2xs'
-                        : 'bg-transparent hover:bg-white/80 border-transparent text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    <Wrench className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Forensics & Tools</span>
-                    <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isToolsDropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
+                    <div className="relative" ref={auditRef}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAuditDropdownOpen(!isAuditDropdownOpen);
+                          setIsDevDropdownOpen(false);
+                        }}
+                        className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs border ${
+                          isCurrentTabInAudit
+                            ? 'bg-emerald-50 text-emerald-900 font-bold border-emerald-300 shadow-2xs'
+                            : 'bg-transparent hover:bg-white/80 border-transparent text-slate-600 hover:text-slate-900'
+                        }`}
+                        title="Role-Gated: Compliance, cryptographic verification, and lineage trees"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Audit & Compliance</span>
+                        <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isAuditDropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
 
-                  {/* Dropdown Menu */}
-                  {isToolsDropdownOpen && (
-                    <div className="absolute left-0 top-full mt-1.5 w-72 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-fade-in">
-                      <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                        Forensic & Architectural Modules
-                      </div>
-                      {secondaryTools.map((tool) => {
-                        const Icon = tool.icon;
-                        const isToolActive = currentTab === tool.id;
-                        return (
-                          <button
-                            key={tool.id}
-                            type="button"
-                            onClick={() => {
-                              setCurrentTab(tool.id);
-                              setIsToolsDropdownOpen(false);
-                            }}
-                            className={`w-full px-3 py-2 text-left flex items-start gap-2.5 transition-colors ${
-                              isToolActive ? 'bg-emerald-50 text-emerald-900' : 'hover:bg-slate-50 text-slate-700'
-                            }`}
-                          >
-                            <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${isToolActive ? 'text-emerald-700' : 'text-slate-400'}`} />
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-semibold text-slate-900">{tool.label}</div>
-                              <div className="text-[11px] text-slate-500 truncate">{tool.desc}</div>
-                            </div>
-                            {isToolActive && (
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5"></span>
-                            )}
-                          </button>
-                        );
-                      })}
+                      {isAuditDropdownOpen && (
+                        <div className="absolute left-0 top-full mt-1.5 w-76 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-fade-in">
+                          <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 flex items-center justify-between">
+                            <span>Role-Gated Compliance Modules</span>
+                            <span className="text-emerald-700 font-mono">ADMIN ONLY</span>
+                          </div>
+                          {roleGatedAuditTools.map((tool) => {
+                            const Icon = tool.icon;
+                            const isToolActive = currentTab === tool.id;
+                            return (
+                              <button
+                                key={tool.id}
+                                type="button"
+                                onClick={() => {
+                                  setCurrentTab(tool.id);
+                                  setIsAuditDropdownOpen(false);
+                                }}
+                                className={`w-full px-3 py-2 text-left flex items-start gap-2.5 transition-colors ${
+                                  isToolActive ? 'bg-emerald-50 text-emerald-900' : 'hover:bg-slate-50 text-slate-700'
+                                }`}
+                              >
+                                <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${isToolActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-xs font-semibold text-slate-900">{tool.label}</div>
+                                  <div className="text-[11px] text-slate-500 truncate">{tool.desc}</div>
+                                </div>
+                                {isToolActive && (
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5"></span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+
+                    {/* 3. Developer / Webhooks Telemetry (Moved to Admin Menu in Live App) */}
+                    <div className="relative" ref={devRef}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsDevDropdownOpen(!isDevDropdownOpen);
+                          setIsAuditDropdownOpen(false);
+                        }}
+                        className={`px-2 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs border ${
+                          isCurrentTabInDev
+                            ? 'bg-slate-100 text-slate-900 font-bold border-slate-300 shadow-2xs'
+                            : 'bg-transparent hover:bg-white/80 border-transparent text-slate-500 hover:text-slate-800'
+                        }`}
+                        title="Developer Mode: Webhooks & Ingestion Telemetry"
+                      >
+                        <Terminal className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Webhooks</span>
+                        <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isDevDropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {isDevDropdownOpen && (
+                        <div className="absolute left-0 top-full mt-1.5 w-72 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-fade-in">
+                          <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                            Developer & Ingestion Tools
+                          </div>
+                          {developerTools.map((tool) => {
+                            const Icon = tool.icon;
+                            const isToolActive = currentTab === tool.id;
+                            return (
+                              <button
+                                key={tool.id}
+                                type="button"
+                                onClick={() => {
+                                  setCurrentTab(tool.id);
+                                  setIsDevDropdownOpen(false);
+                                }}
+                                className={`w-full px-3 py-2 text-left flex items-start gap-2.5 transition-colors ${
+                                  isToolActive ? 'bg-slate-100 text-slate-900' : 'hover:bg-slate-50 text-slate-700'
+                                }`}
+                              >
+                                <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${isToolActive ? 'text-slate-800' : 'text-slate-400'}`} />
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-xs font-semibold text-slate-900">{tool.label}</div>
+                                  <div className="text-[11px] text-slate-500 truncate">{tool.desc}</div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               /* ------------------------------------------------------------- */
@@ -420,7 +515,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">
-            Core Operations
+            Core Operations ({activeRole})
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -442,51 +537,70 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </div>
 
-          <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1 pt-2">
-            Forensic & System Modules
-          </div>
+          {/* Role-gated audit items in mobile */}
+          {activeRole === 'FINANCE_ADMIN' && (
+            <>
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1 pt-2">
+                Audit & Compliance (Admin Only)
+              </div>
 
-          <div className="grid grid-cols-1 gap-1.5">
-            {secondaryTools.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = currentTab === tab.id;
-              return (
+              <div className="grid grid-cols-1 gap-1.5">
+                {roleGatedAuditTools.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = currentTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => { setCurrentTab(tab.id); setIsMobileMenuOpen(false); }}
+                      className={`p-2.5 rounded-lg text-left text-xs font-semibold transition-all flex items-center justify-between ${
+                        isActive ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-700 border border-slate-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>{tab.label}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-mono">AUDIT</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {appMode === 'demo' && (
+            <>
+              <div className="text-[11px] font-bold text-amber-600 uppercase tracking-wider px-1 pt-2">
+                Sandbox Mode Modules
+              </div>
+              <div className="grid grid-cols-1 gap-1.5">
                 <button
-                  key={tab.id}
-                  onClick={() => { setCurrentTab(tab.id); setIsMobileMenuOpen(false); }}
+                  onClick={() => { setCurrentTab('strategy'); setIsMobileMenuOpen(false); }}
                   className={`p-2.5 rounded-lg text-left text-xs font-semibold transition-all flex items-center justify-between ${
-                    isActive ? 'bg-emerald-600 text-white' : 'bg-slate-50 text-slate-700 border border-slate-200'
+                    currentTab === 'strategy' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-900 border border-amber-200'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>{tab.label}</span>
+                    <Zap className="w-3.5 h-3.5 text-amber-600" />
+                    <span>MVP Blueprint (Strategy)</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 font-mono">ACTIVE</span>
+                  <span className="text-[10px] text-amber-600 font-mono">SANDBOX</span>
                 </button>
-              );
-            })}
-
-            {appMode === 'demo' && demoOnlyTabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = currentTab === tab.id;
-              return (
                 <button
-                  key={tab.id}
-                  onClick={() => { setCurrentTab(tab.id); setIsMobileMenuOpen(false); }}
+                  onClick={() => { setCurrentTab('pipeline'); setIsMobileMenuOpen(false); }}
                   className={`p-2.5 rounded-lg text-left text-xs font-semibold transition-all flex items-center justify-between ${
-                    isActive ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-900 border border-amber-200'
+                    currentTab === 'pipeline' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-900 border border-amber-200'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-amber-600" />
-                    <span>{tab.label} (Demo Only)</span>
+                    <GitBranch className="w-3.5 h-3.5 text-amber-600" />
+                    <span>CI/CD Ingestion Simulator</span>
                   </div>
-                  <span className="text-[10px] text-amber-500 font-mono">SANDBOX</span>
+                  <span className="text-[10px] text-amber-600 font-mono">SANDBOX</span>
                 </button>
-              );
-            })}
-          </div>
+              </div>
+            </>
+          )}
 
           <div className="pt-2 border-t border-slate-200 flex items-center gap-2">
             <button

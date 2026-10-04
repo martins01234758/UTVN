@@ -43,6 +43,21 @@ export default function App() {
     }
   };
 
+  const handleRoleChange = (newRole: UserRole) => {
+    setActiveRole(newRole);
+    if (appMode === 'production') {
+      const allowedTabs: Record<UserRole, string[]> = {
+        BUYER: ['dashboard', 'lifecycle', 'pre-release'],
+        SELLER: ['dashboard', 'lifecycle'],
+        BANK_PROVIDER: ['dashboard', 'pre-release', 'fraud-engine'],
+        FINANCE_ADMIN: ['dashboard', 'pre-release', 'lifecycle', 'fraud-engine', 'tree', 'portals', 'trust-model', 'interop', 'pipeline']
+      };
+      if (!allowedTabs[newRole]?.includes(currentTab)) {
+        setCurrentTab('dashboard');
+      }
+    }
+  };
+
   useEffect(() => {
     // Validate Firestore connection on app boot as required by skill
     testConnection();
@@ -163,7 +178,7 @@ export default function App() {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         activeRole={activeRole}
-        setActiveRole={setActiveRole}
+        setActiveRole={handleRoleChange}
         onOpenNewTxModal={() => setIsNewTxModalOpen(true)}
         onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
