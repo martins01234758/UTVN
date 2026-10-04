@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   ShieldCheck, GitBranch, Menu, X, 
   FileSpreadsheet, LogIn, Scan, TableProperties, 
   Layers, Lock, Globe, Award, Zap, Activity, CheckCircle2,
-  Cpu
+  ChevronDown, Wrench, Sparkles, Building2
 } from 'lucide-react';
 import { UserRole } from '../types/utvn';
 import { User as FirebaseUser } from 'firebase/auth';
@@ -18,6 +18,8 @@ interface HeaderProps {
   onOpenAuthModal: () => void;
   onOpenBulkModal: () => void;
   currentUser: FirebaseUser | null;
+  appMode: 'production' | 'demo';
+  setAppMode: (mode: 'production' | 'demo') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,20 +32,53 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuthModal,
   onOpenBulkModal,
   currentUser,
+  appMode,
+  setAppMode,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isToolsDropdownOpen, setIsToolsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Group 1: Core Lifecycle & Verification Operations
-  const coreTabs = [
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsToolsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Core Production Business Operations
+  const coreProductionTabs = [
     { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck },
-    { id: 'pipeline', label: 'CI/CD Pipeline', icon: GitBranch, hasPulse: true },
     { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock },
     { id: 'lifecycle', label: '4-Way Match', icon: Layers },
     { id: 'fraud-engine', label: '16-Point Fraud Engine', icon: Activity, isAlert: true },
   ];
 
-  // Group 2: Advanced Architecture, Protocols & Topology
-  const architectureTabs = [
+  // Secondary Tools (Available in Production dropdown or full Demo bar)
+  const secondaryTools = [
+    { id: 'pipeline', label: 'Webhooks & Ingestion', icon: GitBranch, desc: 'Real-time ERP & spreadsheet sync telemetry' },
+    { id: 'tree', label: 'Topology Tree DAG', icon: GitBranch, desc: 'Cryptographic document dependency lineage' },
+    { id: 'portals', label: 'Role Portals (RBAC)', icon: Award, desc: 'Simulated Buyer, Seller & Bank views' },
+    { id: 'trust-model', label: 'Trust & Cryptography', icon: ShieldCheck, desc: 'Zero-trust Merkle proofs & asymmetric keys' },
+    { id: 'interop', label: 'Global / India Stack', icon: Globe, desc: 'GST e-invoice IRN & PEPPOL UBL 2.1' },
+  ];
+
+  // Demo Sandbox only tabs (e.g. strategic roadmap evaluation)
+  const demoOnlyTabs = [
+    { id: 'strategy', label: 'MVP Blueprint', icon: Zap },
+  ];
+
+  // Full tab list for Sandbox / Demo mode
+  const allDemoTabs = [
+    { id: 'dashboard', label: 'Network Ledger', icon: ShieldCheck },
+    { id: 'pipeline', label: 'CI/CD Pipeline', icon: GitBranch, hasPulse: true },
+    { id: 'pre-release', label: 'Pre-Payment Gate', icon: Lock },
+    { id: 'lifecycle', label: '4-Way Match', icon: Layers },
+    { id: 'fraud-engine', label: '16-Point Fraud Engine', icon: Activity, isAlert: true },
     { id: 'tree', label: 'Topology Tree DAG', icon: GitBranch },
     { id: 'portals', label: 'Role Portals', icon: Award },
     { id: 'trust-model', label: 'Trust & Cryptography', icon: ShieldCheck },
@@ -51,16 +86,18 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'strategy', label: 'MVP Blueprint', icon: Zap },
   ];
 
+  const isCurrentTabInSecondaryTools = secondaryTools.some(tool => tool.id === currentTab);
+
   return (
     <header className="sticky top-0 z-40 bg-white shadow-xs">
       {/* ========================================================================= */}
-      {/* TIER 1: GLOBAL BRAND, UTILITY, PERSONA SIMULATION & PRIMARY ACTIONS       */}
+      {/* TIER 1: GLOBAL BRAND, APP MODE TOGGLE, ROLE, UTILITIES & PRIMARY ACTIONS  */}
       {/* ========================================================================= */}
       <div className="border-b border-slate-200/90 bg-white/95 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
           
-          {/* Brand & Wordmark */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Left: Brand & Mode Segmented Switch */}
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
             <button 
               onClick={() => { setCurrentTab('dashboard'); setIsMobileMenuOpen(false); }}
               className="flex items-center gap-2.5 text-left group focus:outline-none"
@@ -75,28 +112,56 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                   v2.4
                 </span>
-                <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-slate-300"></span>
-                <span className="text-[11px] text-slate-500 font-medium hidden md:inline-block">
-                  Universal Transaction Verification Network
-                </span>
               </div>
             </button>
+
+            {/* Application Mode Switcher: Live Production vs Sandbox / Demo */}
+            <div className="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => setAppMode('production')}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                  appMode === 'production'
+                    ? 'bg-white text-emerald-800 shadow-xs border border-slate-200/80 font-bold'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+                title="Live Enterprise Production Mode: Streamlined for finance, audit, and AP operations"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>Live App</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAppMode('demo')}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                  appMode === 'demo'
+                    ? 'bg-white text-amber-900 shadow-xs border border-slate-200/80 font-bold'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+                title="Sandbox Demo Mode: Full access to all simulators, architecture blueprints & DAG views"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                <span>Sandbox / Demo</span>
+              </button>
+            </div>
           </div>
 
-          {/* Tier 1 Right: Utility, Role Simulator, Account & Primary CTA */}
+          {/* Tier 1 Right: Role Selector, Cloud Sync, User Auth & Scan Primary CTA */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             
             {/* Simulation Persona Selector */}
             <div className="hidden lg:flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs shadow-2xs">
-              <span className="text-slate-400 font-medium mr-1.5 text-[11px] uppercase tracking-wider">Role:</span>
+              <span className="text-slate-400 font-medium mr-1.5 text-[11px] uppercase tracking-wider">
+                {appMode === 'production' ? 'Role:' : 'Simulate:'}
+              </span>
               <select
                 value={activeRole}
                 onChange={(e) => setActiveRole(e.target.value as UserRole)}
                 className="bg-transparent text-emerald-800 font-bold focus:outline-none cursor-pointer text-xs"
               >
                 <option value="FINANCE_ADMIN" className="bg-white text-slate-800">Finance & Risk Admin</option>
-                <option value="BUYER" className="bg-white text-slate-800">Buyer (Enterprise)</option>
-                <option value="SELLER" className="bg-white text-slate-800">Seller (Vendor)</option>
+                <option value="BUYER" className="bg-white text-slate-800">Buyer (Enterprise AP)</option>
+                <option value="SELLER" className="bg-white text-slate-800">Seller (Vendor AR)</option>
                 <option value="BANK_PROVIDER" className="bg-white text-slate-800">Settlement Bank</option>
               </select>
             </div>
@@ -174,68 +239,137 @@ export const Header: React.FC<HeaderProps> = ({
       {/* ========================================================================= */}
       {/* TIER 2: WORKFLOW NAVIGATION & PROTOCOL MODULES STRIP                      */}
       {/* ========================================================================= */}
-      <div className="border-b border-slate-200/80 bg-slate-50/70 backdrop-blur-md">
+      <div className={`border-b backdrop-blur-md transition-colors ${
+        appMode === 'production' 
+          ? 'border-slate-200/80 bg-slate-50/70' 
+          : 'border-amber-200/80 bg-amber-50/40'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4 overflow-x-auto scrollbar-none">
           
-          {/* Left: Operations & Architecture Navigation Tabs */}
+          {/* Left: Navigation Buttons */}
           <nav className="flex items-center gap-1 text-xs font-medium text-slate-600 shrink-0">
             
-            {/* Section 1: Operations */}
-            <div className="flex items-center gap-1">
-              {coreTabs.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = currentTab === tab.id;
-                return (
+            {/* ------------------------------------------------------------- */}
+            {/* MODE A: LIVE PRODUCTION NAVIGATION (Streamlined & Clean)      */}
+            {/* ------------------------------------------------------------- */}
+            {appMode === 'production' ? (
+              <div className="flex items-center gap-1">
+                {coreProductionTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = currentTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setCurrentTab(tab.id)}
+                      className={`px-3 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                        isActive
+                          ? 'bg-white text-emerald-900 font-bold border border-emerald-200/80 shadow-2xs'
+                          : 'hover:text-slate-900 hover:bg-white/80 text-slate-700'
+                      }`}
+                    >
+                      <Icon className={`w-3.5 h-3.5 ${tab.isAlert ? 'text-rose-500' : isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+
+                {/* Subtle Divider */}
+                <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
+
+                {/* Forensics & Advanced Tools Dropdown */}
+                <div className="relative" ref={dropdownRef}>
                   <button
-                    key={tab.id}
-                    onClick={() => setCurrentTab(tab.id)}
-                    className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs ${
-                      isActive
-                        ? 'bg-white text-emerald-900 font-bold border border-emerald-200/80 shadow-2xs'
-                        : 'hover:text-slate-900 hover:bg-white/80'
+                    type="button"
+                    onClick={() => setIsToolsDropdownOpen(!isToolsDropdownOpen)}
+                    className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs border ${
+                      isCurrentTabInSecondaryTools
+                        ? 'bg-emerald-50 text-emerald-900 font-bold border-emerald-300 shadow-2xs'
+                        : 'bg-transparent hover:bg-white/80 border-transparent text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${tab.isAlert ? 'text-rose-500' : isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
-                    <span>{tab.label}</span>
-                    {tab.hasPulse && (
-                      <span className="flex h-1.5 w-1.5 relative ml-0.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600"></span>
-                      </span>
-                    )}
+                    <Wrench className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Forensics & Tools</span>
+                    <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isToolsDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
-                );
-              })}
-            </div>
 
-            {/* Subtle Divider */}
-            <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
-
-            {/* Section 2: Architecture & Topology */}
-            <div className="flex items-center gap-1">
-              {architectureTabs.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = currentTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setCurrentTab(tab.id)}
-                    className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs ${
-                      isActive
-                        ? 'bg-white text-emerald-900 font-bold border border-emerald-200/80 shadow-2xs'
-                        : 'hover:text-slate-900 hover:bg-white/80 text-slate-600'
-                    }`}
-                  >
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+                  {/* Dropdown Menu */}
+                  {isToolsDropdownOpen && (
+                    <div className="absolute left-0 top-full mt-1.5 w-72 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-fade-in">
+                      <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                        Forensic & Architectural Modules
+                      </div>
+                      {secondaryTools.map((tool) => {
+                        const Icon = tool.icon;
+                        const isToolActive = currentTab === tool.id;
+                        return (
+                          <button
+                            key={tool.id}
+                            type="button"
+                            onClick={() => {
+                              setCurrentTab(tool.id);
+                              setIsToolsDropdownOpen(false);
+                            }}
+                            className={`w-full px-3 py-2 text-left flex items-start gap-2.5 transition-colors ${
+                              isToolActive ? 'bg-emerald-50 text-emerald-900' : 'hover:bg-slate-50 text-slate-700'
+                            }`}
+                          >
+                            <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${isToolActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs font-semibold text-slate-900">{tool.label}</div>
+                              <div className="text-[11px] text-slate-500 truncate">{tool.desc}</div>
+                            </div>
+                            {isToolActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5"></span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* ------------------------------------------------------------- */
+              /* MODE B: SANDBOX / DEMO NAVIGATION (All 10 Tabs Unlocked)      */
+              /* ------------------------------------------------------------- */
+              <div className="flex items-center gap-1">
+                {allDemoTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = currentTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setCurrentTab(tab.id)}
+                      className={`px-2.5 py-1 rounded-md transition-all duration-150 whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                        isActive
+                          ? 'bg-white text-emerald-900 font-bold border border-emerald-300 shadow-2xs'
+                          : 'hover:text-slate-900 hover:bg-white/80 text-slate-600'
+                      }`}
+                    >
+                      <Icon className={`w-3.5 h-3.5 ${tab.isAlert ? 'text-rose-500' : isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                      <span>{tab.label}</span>
+                      {tab.hasPulse && (
+                        <span className="flex h-1.5 w-1.5 relative ml-0.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600"></span>
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </nav>
 
-          {/* Right: Network Integrity Status Pill */}
-          <div className="hidden xl:flex items-center gap-2 text-[11px] text-slate-500 font-mono shrink-0">
+          {/* Right: Integrity & Mode Badges */}
+          <div className="hidden lg:flex items-center gap-2 text-[11px] font-mono shrink-0">
+            {appMode === 'demo' && (
+              <span className="flex items-center gap-1 text-amber-800 font-semibold bg-amber-100/80 px-2 py-0.5 rounded border border-amber-300">
+                <Sparkles className="w-3 h-3 text-amber-600" />
+                <span>Sandbox Mode (All 10 Modules)</span>
+              </span>
+            )}
+            
             <span className="flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
               <CheckCircle2 className="w-3 h-3 text-emerald-600" />
               <span>SHA-256 Ledger Sealed</span>
@@ -249,6 +383,27 @@ export const Header: React.FC<HeaderProps> = ({
       {/* ========================================================================= */}
       {isMobileMenuOpen && (
         <div className="lg:hidden border-b border-slate-200 bg-white/98 backdrop-blur-2xl px-4 py-4 space-y-3 shadow-xl max-h-[85vh] overflow-y-auto">
+          {/* Mode Switcher in mobile drawer */}
+          <div className="flex items-center justify-between p-2.5 bg-slate-100 rounded-xl">
+            <span className="text-xs font-semibold text-slate-700">Environment:</span>
+            <div className="flex items-center bg-white p-0.5 rounded-lg border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setAppMode('production')}
+                className={`px-2 py-1 text-xs font-bold rounded ${appMode === 'production' ? 'bg-emerald-600 text-white' : 'text-slate-600'}`}
+              >
+                Live App
+              </button>
+              <button
+                type="button"
+                onClick={() => setAppMode('demo')}
+                className={`px-2 py-1 text-xs font-bold rounded ${appMode === 'demo' ? 'bg-amber-600 text-white' : 'text-slate-600'}`}
+              >
+                Sandbox
+              </button>
+            </div>
+          </div>
+
           {/* Role selector in mobile drawer */}
           <div className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
             <span className="text-xs text-slate-600 font-medium">Active Simulation Role:</span>
@@ -258,8 +413,8 @@ export const Header: React.FC<HeaderProps> = ({
               className="bg-transparent text-emerald-800 font-bold text-xs focus:outline-none"
             >
               <option value="FINANCE_ADMIN" className="bg-white text-slate-800">Finance & Risk Admin</option>
-              <option value="BUYER" className="bg-white text-slate-800">Buyer (Enterprise)</option>
-              <option value="SELLER" className="bg-white text-slate-800">Seller (Vendor)</option>
+              <option value="BUYER" className="bg-white text-slate-800">Buyer (Enterprise AP)</option>
+              <option value="SELLER" className="bg-white text-slate-800">Seller (Vendor AR)</option>
               <option value="BANK_PROVIDER" className="bg-white text-slate-800">Settlement Bank</option>
             </select>
           </div>
@@ -269,7 +424,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            {coreTabs.map((tab) => {
+            {coreProductionTabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = currentTab === tab.id;
               return (
@@ -288,11 +443,11 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1 pt-2">
-            Architecture & Protocols
+            Forensic & System Modules
           </div>
 
           <div className="grid grid-cols-1 gap-1.5">
-            {architectureTabs.map((tab) => {
+            {secondaryTools.map((tab) => {
               const Icon = tab.icon;
               const isActive = currentTab === tab.id;
               return (
@@ -308,6 +463,26 @@ export const Header: React.FC<HeaderProps> = ({
                     <span>{tab.label}</span>
                   </div>
                   <span className="text-[10px] text-slate-400 font-mono">ACTIVE</span>
+                </button>
+              );
+            })}
+
+            {appMode === 'demo' && demoOnlyTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = currentTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => { setCurrentTab(tab.id); setIsMobileMenuOpen(false); }}
+                  className={`p-2.5 rounded-lg text-left text-xs font-semibold transition-all flex items-center justify-between ${
+                    isActive ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-900 border border-amber-200'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon className="w-3.5 h-3.5 text-amber-600" />
+                    <span>{tab.label} (Demo Only)</span>
+                  </div>
+                  <span className="text-[10px] text-amber-500 font-mono">SANDBOX</span>
                 </button>
               );
             })}
@@ -332,5 +507,3 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-
-

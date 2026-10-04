@@ -30,6 +30,18 @@ export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+  const [appMode, setAppMode] = useState<'production' | 'demo'>(() => {
+    const saved = localStorage.getItem('utvn_app_mode');
+    return (saved === 'production' || saved === 'demo') ? saved : 'production';
+  });
+
+  const handleSetAppMode = (mode: 'production' | 'demo') => {
+    setAppMode(mode);
+    localStorage.setItem('utvn_app_mode', mode);
+    if (mode === 'production' && currentTab === 'strategy') {
+      setCurrentTab('dashboard');
+    }
+  };
 
   useEffect(() => {
     // Validate Firestore connection on app boot as required by skill
@@ -157,6 +169,8 @@ export default function App() {
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
         onOpenBulkModal={() => setIsBulkModalOpen(true)}
         currentUser={currentUser}
+        appMode={appMode}
+        setAppMode={handleSetAppMode}
       />
 
       {/* Main Viewport Container */}
