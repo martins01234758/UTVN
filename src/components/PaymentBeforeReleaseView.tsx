@@ -268,6 +268,7 @@ export const PaymentBeforeReleaseView: React.FC = () => {
 
           {/* Table of Scheduled Batch Items */}
           <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+            <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
                 <tr>
@@ -355,6 +356,7 @@ export const PaymentBeforeReleaseView: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* Deep Explanation of What Just Happened */}

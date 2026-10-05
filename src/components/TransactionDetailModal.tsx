@@ -384,6 +384,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                   Line Items 4-Way Mathematical Verification
                 </h4>
                 <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-xs">
+                  <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
                       <tr>
@@ -437,6 +438,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
 
@@ -889,6 +891,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
 
                 {/* Audit Line Items */}
                 <div className="border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="overflow-x-auto">
                   <table className="w-full text-left text-[11px]">
                     <thead className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
                       <tr>
@@ -911,6 +914,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
 
                 {/* Notarized Certification Seal */}

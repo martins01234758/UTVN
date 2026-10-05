@@ -231,6 +231,7 @@ export const StrategicMvpEvaluationView: React.FC = () => {
           </div>
 
           <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-2xs">
+            <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
                 <tr>
@@ -272,6 +273,7 @@ export const StrategicMvpEvaluationView: React.FC = () => {
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       )}
